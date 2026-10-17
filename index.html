@@ -1,186 +1,264 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>أبو ناصر ماركت</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#167a43">
+  <title>أبو ناصر ماركت | دفتر الديون</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f1f5f9;
-      color: #172033;
-    }
-    header {
-      background: #14532d;
-      color: white;
-      padding: 24px 16px;
-      text-align: center;
-    }
-    header h1 { margin: 0 0 8px; }
-    main { padding: 16px; max-width: 700px; margin: auto; }
-    .card {
-      background: white;
-      padding: 18px;
-      margin-bottom: 14px;
-      border-radius: 14px;
-      box-shadow: 0 2px 8px #0000000c;
-    }
-    .total { font-size: 28px; color: #15803d; font-weight: bold; }
-    input, button {
-      width: 100%;
-      padding: 13px;
-      margin-top: 10px;
-      border-radius: 9px;
-      font-size: 16px;
-    }
-    input { border: 1px solid #cbd5e1; }
-    button {
-      border: none;
-      background: #15803d;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .customer {
-      padding: 12px 0;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    .small { color: #64748b; font-size: 13px; }
-    .delete { background: #b91c1c; }
+    :root { --green:#167a43; --green-dark:#106334; --bg:#f1f4f8; --ink:#172033; --muted:#718096; --red:#c0392b; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif; }
+    header { background:var(--green); color:#fff; padding:22px 18px 26px; border-radius:0 0 24px 24px; }
+    header h1 { margin:0 0 6px; font-size:26px; }
+    header p { margin:0; opacity:.9; }
+    main { max-width:760px; margin:18px auto; padding:0 14px 35px; }
+    .card { background:#fff; border-radius:22px; padding:22px; margin-bottom:18px; box-shadow:0 5px 20px #18243a0b; }
+    h2 { font-size:21px; margin:0 0 18px; }
+    .total-label { color:var(--muted); font-weight:600; }
+    .total { color:var(--green); font-size:36px; font-weight:800; margin:8px 0; direction:ltr; text-align:right; }
+    .hint { color:var(--muted); font-size:13px; line-height:1.6; }
+    label { display:block; font-weight:650; margin:12px 0 7px; }
+    input { width:100%; padding:15px 14px; border:1px solid #cbd2dc; border-radius:13px; font:inherit; font-size:17px; background:#fff; }
+    input:focus { outline:2px solid #b9e2c9; border-color:var(--green); }
+    button { border:0; border-radius:13px; padding:14px 16px; font:inherit; font-weight:750; cursor:pointer; }
+    .primary { background:var(--green); color:white; width:100%; margin-top:14px; }
+    .primary:active { background:var(--green-dark); }
+    .secondary { background:#e7f4ec; color:var(--green-dark); }
+    .danger { background:#fff0ef; color:var(--red); }
+    .customer { border:1px solid #e6eaf0; border-radius:17px; padding:16px; margin-top:13px; }
+    .customer-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+    .customer-name { font-size:19px; font-weight:800; overflow-wrap:anywhere; }
+    .phone { color:var(--muted); font-size:13px; margin-top:4px; direction:ltr; text-align:right; }
+    .debt { font-size:24px; font-weight:800; color:var(--green); white-space:nowrap; direction:ltr; }
+    .debt.owed-zero { color:var(--muted); }
+    .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+    .actions button { flex:1; min-width:115px; }
+    .empty { text-align:center; color:var(--muted); padding:14px 0 4px; }
+    .history { margin-top:13px; padding-top:12px; border-top:1px solid #e8edf2; }
+    .history summary { cursor:pointer; color:var(--green-dark); font-weight:700; }
+    .entry { display:flex; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid #f0f2f5; font-size:14px; }
+    .entry:last-child { border-bottom:0; }
+    .paid { color:var(--green); font-weight:750; }
+    .start-debt { color:#b45309; font-size:13px; margin-top:5px; }
+    .notice { background:#fff8e7; color:#7b5a12; border-radius:13px; padding:12px 14px; font-size:13px; line-height:1.7; }
+    .modal-backdrop { display:none; position:fixed; inset:0; background:#0d1728a6; padding:18px; z-index:5; align-items:center; justify-content:center; }
+    .modal-backdrop.show { display:flex; }
+    .modal { width:100%; max-width:440px; background:white; border-radius:22px; padding:22px; max-height:90vh; overflow:auto; }
+    .modal h2 { margin-bottom:8px; }
+    .modal-buttons { display:flex; gap:10px; margin-top:12px; }
+    .modal-buttons button { flex:1; }
+    .small { font-size:12px; color:var(--muted); margin-top:6px; }
+    footer { text-align:center; color:var(--muted); font-size:12px; padding:0 14px 25px; }
   </style>
 </head>
 <body>
   <header>
     <h1>🛒 أبو ناصر ماركت</h1>
-    <div>نظام إدارة حسابات المحل</div>
+    <p>دفتر الزبائن والديون — العملة: الشيكل ₪</p>
   </header>
 
   <main>
     <section class="card">
-      <h3>إجمالي الديون المتبقية</h3>
-      <div class="total" id="total">0.00 ₪</div>
-      <p class="small">البيانات في هذه النسخة محفوظة على هذا الجهاز فقط.</p>
+      <div class="total-label">إجمالي الديون المتبقية</div>
+      <div class="total" id="totalDebt">₪ 0.00</div>
+      <div class="hint">هذا المبلغ هو مجموع الديون المتبقية على جميع الزبائن.</div>
     </section>
 
     <section class="card">
-      <h3>➕ إضافة زبون</h3>
-      <input id="name" placeholder="اسم الزبون">
-      <input id="phone" placeholder="رقم الهاتف (اختياري)">
-      <input id="debt" type="number" min="0" step="0.01" placeholder="الدين الأول بالشيكل">
-      <button onclick="addCustomer()">حفظ الزبون</button>
+      <h2>➕ إضافة زبون</h2>
+      <form id="customerForm">
+        <label for="name">اسم الزبون</label>
+        <input id="name" maxlength="80" placeholder="مثال: محمد أحمد" required>
+        <label for="phone">رقم الهاتف (اختياري)</label>
+        <input id="phone" type="tel" maxlength="30" placeholder="05xxxxxxxx">
+        <label for="debt">الدين الأول بالشيكل</label>
+        <input id="debt" type="number" min="0" max="100000000" step="0.01" inputmode="decimal" placeholder="0.00" value="0" required>
+        <button class="primary" type="submit">حفظ الزبون</button>
+      </form>
     </section>
 
     <section class="card">
-      <h3>👥 قائمة الزبائن</h3>
-      <div id="customers">لا يوجد زبائن حتى الآن.</div>
+      <h2>👥 قائمة الزبائن</h2>
+      <div id="customerList"><div class="empty">لا يوجد زبائن حتى الآن.</div></div>
     </section>
+
+    <section class="card">
+      <h2>🛡️ نسخة احتياطية</h2>
+      <p class="hint">احفظ نسخة من دفتر الحسابات في ملف، واسترجعها عند الحاجة أو عند تغيير الهاتف.</p>
+      <div class="actions">
+        <button class="secondary" id="exportBtn" type="button">تنزيل نسخة احتياطية</button>
+        <button class="secondary" id="importBtn" type="button">استرجاع نسخة</button>
+        <input id="importFile" type="file" accept=".json,application/json" hidden>
+      </div>
+      <p class="small">البيانات محفوظة في هذا المتصفح على هذا الجهاز فقط، وليست متزامنة تلقائيًا مع أجهزة أخرى.</p>
+    </section>
+
+    <div class="notice">مهم: لا تمسح بيانات المتصفح قبل تنزيل نسخة احتياطية. هذا الإصدار لا يرسل بيانات الزبائن إلى الإنترنت.</div>
   </main>
+  <footer>أبو ناصر ماركت © دفتر حسابات محلي</footer>
 
-  <script>
-    let customers = [];
+  <div class="modal-backdrop" id="paymentModal" role="dialog" aria-modal="true" aria-labelledby="paymentTitle">
+    <div class="modal">
+      <h2 id="paymentTitle">💵 تسجيل دفعة</h2>
+      <p id="paymentCustomer" class="hint"></p>
+      <p id="paymentBalance" class="total" style="font-size:26px"></p>
+      <form id="paymentForm">
+        <input id="paymentCustomerId" type="hidden">
+        <label for="paymentAmount">مبلغ الدفعة بالشيكل</label>
+        <input id="paymentAmount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="مثال: 50" required>
+        <label for="paymentNote">ملاحظة (اختياري)</label>
+        <input id="paymentNote" maxlength="120" placeholder="مثال: دفعة نقدية">
+        <div class="modal-buttons">
+          <button class="primary" type="submit" style="margin-top:0">تأكيد الدفعة</button>
+          <button class="danger" type="button" id="cancelPayment">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const STORAGE_KEY = "abuNasserMarketCustomersV2";
+  const $ = (id) => document.getElementById(id);
+  let customers = [];
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    if (Array.isArray(saved)) customers = saved;
+    else {
+      // ترحيل بيانات النسخة السابقة إن كانت موجودة
+      const old = JSON.parse(localStorage.getItem("abuNasserMarket") || "null");
+      if (Array.isArray(old)) customers = old.map(c => ({
+        id: c.id || makeId(), name: String(c.name || ""), phone: String(c.phone || ""),
+        initialDebt: Number(c.debt || 0), debt: Number(c.debt || 0), payments: []
+      }));
+    }
+  } catch (_) { customers = []; }
+
+  function makeId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+  function money(n) { return "₪ " + Number(n || 0).toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2}); }
+  function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(customers)); }
+  function totalDebt() { return customers.reduce((sum, c) => sum + Math.max(0, Number(c.debt) || 0), 0); }
+
+  function render() {
+    $("totalDebt").textContent = money(totalDebt());
+    const list = $("customerList");
+    if (!customers.length) {
+      list.innerHTML = '<div class="empty">لا يوجد زبائن حتى الآن.</div>';
+      return;
+    }
+    list.innerHTML = customers.map(c => {
+      const balance = Math.max(0, Number(c.debt) || 0);
+      const payments = Array.isArray(c.payments) ? c.payments : [];
+      const history = payments.length
+        ? payments.slice().reverse().map(p => `<div class="entry"><span><span class="paid">دفعة ${money(p.amount)}</span><br><span class="small">${esc(p.date)}${p.note ? " — " + esc(p.note) : ""}</span></span></div>`).join("")
+        : '<p class="hint">لا توجد دفعات مسجلة.</p>';
+      return `<article class="customer">
+        <div class="customer-top">
+          <div><div class="customer-name">${esc(c.name)}</div>${c.phone ? `<div class="phone">${esc(c.phone)}</div>` : ""}
+            <div class="start-debt">الدين عند الإضافة: ${money(c.initialDebt ?? c.debt)}</div>
+          </div>
+          <div class="debt ${balance === 0 ? "owed-zero" : ""}">${money(balance)}</div>
+        </div>
+        <div class="actions">
+          <button class="primary" type="button" data-action="pay" data-id="${esc(c.id)}" style="margin-top:0" ${balance <= 0 ? "disabled" : ""}>تسجيل دفعة</button>
+          <button class="secondary" type="button" data-action="history" data-id="${esc(c.id)}">سجل الدفعات (${payments.length})</button>
+          <button class="danger" type="button" data-action="delete" data-id="${esc(c.id)}">حذف</button>
+        </div>
+        <div class="history" id="history-${esc(c.id)}" hidden><strong>سجل الدفعات</strong>${history}</div>
+      </article>`;
+    }).join("");
+  }
+
+  $("customerForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const name = $("name").value.trim();
+    const phone = $("phone").value.trim();
+    const debt = Number($("debt").value);
+    if (!name) return alert("اكتب اسم الزبون.");
+    if (!Number.isFinite(debt) || debt < 0) return alert("أدخل مبلغ دين صحيح.");
+    customers.unshift({id:makeId(), name, phone, initialDebt:debt, debt, payments:[], createdAt:new Date().toISOString()});
+    save(); render(); e.target.reset(); $("debt").value = "0"; $("name").focus();
+  });
+
+  $("customerList").addEventListener("click", e => {
+    const btn = e.target.closest("button[data-action]");
+    if (!btn) return;
+    const c = customers.find(x => String(x.id) === btn.dataset.id);
+    if (!c) return;
+    if (btn.dataset.action === "pay") openPayment(c);
+    if (btn.dataset.action === "history") {
+      const panel = $("history-" + c.id);
+      if (panel) panel.hidden = !panel.hidden;
+    }
+    if (btn.dataset.action === "delete") {
+      if (confirm(`هل أنت متأكد من حذف حساب ${c.name} وكل سجل دفعاته؟`)) {
+        customers = customers.filter(x => String(x.id) !== String(c.id)); save(); render();
+      }
+    }
+  });
+
+  function openPayment(c) {
+    $("paymentCustomerId").value = c.id;
+    $("paymentCustomer").textContent = "الزبون: " + c.name;
+    $("paymentBalance").textContent = "الدين المتبقي: " + money(c.debt);
+    $("paymentAmount").value = "";
+    $("paymentAmount").max = Math.max(0, Number(c.debt) || 0);
+    $("paymentNote").value = "";
+    $("paymentModal").classList.add("show");
+    setTimeout(() => $("paymentAmount").focus(), 50);
+  }
+  function closePayment() { $("paymentModal").classList.remove("show"); }
+  $("cancelPayment").addEventListener("click", closePayment);
+  $("paymentModal").addEventListener("click", e => { if (e.target === $("paymentModal")) closePayment(); });
+  $("paymentForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const id = $("paymentCustomerId").value;
+    const c = customers.find(x => String(x.id) === String(id));
+    const amount = Math.round(Number($("paymentAmount").value) * 100) / 100;
+    if (!c) return alert("لم يتم العثور على الزبون.");
+    const balance = Math.round((Number(c.debt) || 0) * 100) / 100;
+    if (!Number.isFinite(amount) || amount <= 0) return alert("أدخل مبلغ دفعة صحيحًا.");
+    if (amount > balance) return alert("مبلغ الدفعة أكبر من الدين المتبقي (" + money(balance) + ").");
+    c.debt = Math.round((balance - amount) * 100) / 100;
+    if (!Array.isArray(c.payments)) c.payments = [];
+    c.payments.push({amount, date:new Date().toLocaleString("ar-PS"), note:$("paymentNote").value.trim()});
+    save(); render(); closePayment();
+    alert("تم تسجيل الدفعة بنجاح، والدين المتبقي " + money(c.debt));
+  });
+
+  $("exportBtn").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify({app:"abu-nasser-market", version:2, exportedAt:new Date().toISOString(), customers}, null, 2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "abu-nasser-market-backup-" + new Date().toISOString().slice(0,10) + ".json";
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  });
+  $("importBtn").addEventListener("click", () => $("importFile").click());
+  $("importFile").addEventListener("change", async e => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
     try {
-      customers = JSON.parse(localStorage.getItem("abuNasserCustomers") || "[]");
-      if (!Array.isArray(customers)) customers = [];
-    } catch (e) {
-      customers = [];
-    }
-
-    function save() {
-      try {
-        localStorage.setItem("abuNasserCustomers", JSON.stringify(customers));
-      } catch (e) {
-        alert("تعذر حفظ البيانات على هذا الجهاز.");
+      const data = JSON.parse(await file.text());
+      const incoming = Array.isArray(data) ? data : data.customers;
+      if (!Array.isArray(incoming) || !incoming.every(c => c && typeof c.name === "string" && Number.isFinite(Number(c.debt)))) {
+        throw new Error("الملف غير صالح");
       }
-      render();
-    }
+      if (!confirm("استرجاع النسخة سيستبدل البيانات الحالية. هل تريد المتابعة؟")) return;
+      customers = incoming.map(c => ({
+        id: c.id || makeId(), name: c.name, phone: c.phone || "",
+        initialDebt: Number(c.initialDebt ?? c.debt), debt: Math.max(0, Number(c.debt) || 0),
+        payments: Array.isArray(c.payments) ? c.payments : [], createdAt: c.createdAt || null
+      }));
+      save(); render(); alert("تم استرجاع النسخة الاحتياطية بنجاح.");
+    } catch (_) { alert("تعذر قراءة الملف. تأكد أنك اخترت نسخة احتياطية صحيحة من الموقع."); }
+    finally { e.target.value = ""; }
+  });
 
-    function addCustomer() {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const debtText = document.getElementById("debt").value;
-      const debt = Number(debtText || 0);
-
-      if (!name) return alert("اكتب اسم الزبون أولاً.");
-      if (!Number.isFinite(debt) || debt < 0)
-        return alert("أدخل ديناً صحيحاً.");
-
-      customers.push({
-        id: Date.now(),
-        name, phone, debt
-      });
-
-      document.getElementById("name").value = "";
-      document.getElementById("phone").value = "";
-      document.getElementById("debt").value = "";
-      save();
-    }
-
-    function payment(id) {
-      const c = customers.find(x => x.id === id);
-      if (!c) return;
-
-      const amount = Number(prompt("كم دفع الزبون بالشيكل؟"));
-      if (!Number.isFinite(amount) || amount <= 0)
-        return alert("أدخل مبلغاً صحيحاً.");
-      if (amount > c.debt)
-        return alert("المبلغ أكبر من الدين المتبقي.");
-
-      c.debt = Math.round((c.debt - amount) * 100) / 100;
-      save();
-    }
-
-    function removeCustomer(id) {
-      if (!confirm("هل تريد حذف هذا الزبون؟")) return;
-      customers = customers.filter(c => c.id !== id);
-      save();
-    }
-
-    function render() {
-      const total = customers.reduce((s, c) => s + c.debt, 0);
-      document.getElementById("total").textContent =
-        total.toFixed(2) + " ₪";
-
-      const list = document.getElementById("customers");
-      list.replaceChildren();
-
-      if (!customers.length) {
-        list.textContent = "لا يوجد زبائن حتى الآن.";
-        return;
-      }
-
-      customers.forEach(c => {
-        const item = document.createElement("div");
-        item.className = "customer";
-
-        const title = document.createElement("strong");
-        title.textContent = c.name;
-        item.appendChild(title);
-
-        const details = document.createElement("p");
-        details.textContent =
-          (c.phone ? "الهاتف: " + c.phone + " | " : "") +
-          "الدين المتبقي: " + c.debt.toFixed(2) + " ₪";
-        item.appendChild(details);
-
-        const pay = document.createElement("button");
-        pay.textContent = "تسجيل دفعة";
-        pay.onclick = () => payment(c.id);
-        item.appendChild(pay);
-
-        const del = document.createElement("button");
-        del.textContent = "حذف الزبون";
-        del.className = "delete";
-        del.onclick = () => removeCustomer(c.id);
-        item.appendChild(del);
-
-        list.appendChild(item);
-      });
-    }
-
-    render();
-  </script>
+  save();
+  render();
+})();
+</script>
 </body>
 </html>
