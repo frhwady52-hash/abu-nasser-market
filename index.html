@@ -1,132 +1,126 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>دكاني</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css">
+<title>دكاني</title>
 
-  https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap
+<link rel="stylesheet" href="style.css">
+
+https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap
+
 </head>
 
 <body>
 
-  <header class="header">
-
-    <div class="logo">
-      🛒 دكاني
-    </div>
+<header class="header">
+    <div class="logo">🛒 دكاني</div>
 
     <div class="cart-icon">
-      cart.html🛍️ السلة</a>
+        cart.html🛍️ السلة</a>
     </div>
+</header>
 
-  </header>
+<section class="hero">
 
-  <section class="hero">
+<h1>كل احتياجاتك اليومية</h1>
 
-    <h1>كل احتياجاتك اليومية</h1>
+<p>أفضل المواد الغذائية بأفضل الأسعار</p>
 
-    <p>
-      أفضل المواد الغذائية بأفضل الأسعار
-    </p>
+#products
+تسوق الآن
+</a>
 
-    #products
-      تسوق الآن
-    </a>
+</section>
 
-  </section>
+<section class="categories">
 
-  <section class="categories">
+<h2>الأقسام</h2>
 
-    <h2>الأقسام</h2>
+<div class="category-list">
 
-    <div class="category-list">
+<div class="category">
+🥛
+<span>ألبان</span>
+</div>
 
-      <div class="category">
-        🥛
-        <span>ألبان</span>
-      </div>
+<div class="category">
+🥤
+<span>مشروبات</span>
+</div>
 
-      <div class="category">
-        🥤
-        <span>مشروبات</span>
-      </div>
+<div class="category">
+🍫
+<span>حلويات</span>
+</div>
 
-      <div class="category">
-        🍫
-        <span>حلويات</span>
-      </div>
+<div class="category">
+🍎
+<span>خضار</span>
+</div>
 
-      <div class="category">
-        🍎
-        <span>خضار</span>
-      </div>
+</div>
 
-    </div>
+</section>
 
-  </section>
+<section id="products" class="products">
 
-  <section id="products" class="products">
+<h2>المنتجات</h2>
 
-    <h2>المنتجات</h2>
+<div class="product-grid">
 
-    <div class="product-grid">
+<div class="card">
 
-      <div class="card">
+https://images.unsplash.com/photo-1550583724-b2692b85b150?w=500
 
-        https://images.unsplash.com/photo-1550583724-b2692b85b150?w=500
+<h3>حليب كامل الدسم</h3>
 
-        <h3>حليب كامل الدسم</h3>
+<p class="price">$1.25</p>
 
-        <p class="price">$1.25</p>
+<button onclick="addToCart('حليب كامل الدسم',1.25)">
+أضف للسلة
+</button>
 
-        <button onclick="addToCart('حليب كامل الدسم',1.25)">
-          أضف للسلة
-        </button>
+</div>
 
-      </div>
+<div class="card">
 
-      <div class="card">
+https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500
 
-        https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500
+<h3>أرز بسمتي</h3>
 
-        <h3>أرز بسمتي</h3>
+<p class="price">$2.50</p>
 
-        <p class="price">$2.50</p>
+<button onclick="addToCart('أرز بسمتي',2.50)">
+أضف للسلة
+</button>
 
-        <button onclick="addToCart('أرز بسمتي',2.50)">
-          أضف للسلة
-        </button>
+</div>
 
-      </div>
+<div class="card">
 
-      <div class="card">
+https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?w=500
 
-        https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?w=500
+<h3>زيت عباد الشمس</h3>
 
-        <h3>زيت عباد الشمس</h3>
+<p class="price">$3.90</p>
 
-        <p class="price">$3.90</p>
+<button onclick="addToCart('زيت عباد الشمس',3.90)">
+أضف للسلة
+</button>
 
-        <button onclick="addToCart('زيت عباد الشمس',3.90)">
-          أضف للسلة
-        </button>
+</div>
 
-      </div>
+</div>
 
-    </div>
+</section>
 
-  </section>
+<footer>
+© 2026 دكاني
+</footer>
 
-  <footer>
-    <p>© 2026 دكاني</p>
-  </footer>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 
 </body>
-
 </html>
