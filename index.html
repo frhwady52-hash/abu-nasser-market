@@ -3,346 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أبو ناصر ماركت - النظام المحاسبي المتكامل</title>
+    <title>أبو ناصر ماركت - يومية اليوم</title>
     <style>
         :root {
-            --primary: #0f766e;
-            --accent: #f59e0b;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --bg: #f1f5f9;
-            --card: #ffffff;
-            --text: #1e293b;
+            --primary-dark: #0f172a;
+            --accent-green: #16a34a;
+            --accent-red: #dc2626;
+            --accent-gold: #f59e0b;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
         }
-        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 75px; }
-        
-        .top-bar { background: #0f172a; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .top-bar h2 { margin: 0; font-size: 1.2rem; }
-        .total-badge { background: #fee2e2; color: var(--danger); padding: 4px 10px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
 
-        .container { max-width: 600px; margin: 15px auto; padding: 0 10px; }
+        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-color); color: #1e293b; margin: 0; padding-bottom: 80px; }
+
+        /* الهيدر العلوي */
+        .top-bar {
+            background: #ffffff;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 40px; height: 40px; background: #854d0e; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
+        .user-title { font-weight: bold; font-size: 1.1rem; margin: 0; }
+        .user-date { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+        
+        .status-badge { background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        .debt-box { margin-top: 8px; font-size: 1.2rem; font-weight: bold; color: var(--accent-red); }
+        .debt-label { font-size: 0.75rem; color: #64748b; font-weight: normal; }
+
+        .container { max-width: 500px; margin: 10px auto; padding: 0 12px; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .card h3 { margin-top: 0; color: var(--primary); font-size: 1.1rem; }
-        
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; border-top: 1px solid #cbd5e1; padding: 8px 0; z-index: 1000; box-shadow: 0 -2px 5px rgba(0,0,0,0.05); }
-        .nav-item { text-align: center; color: #64748b; font-size: 0.75rem; cursor: pointer; background: none; border: none; flex: 1; }
-        .nav-item.active { color: var(--primary); font-weight: bold; }
-        .nav-item span { display: block; font-size: 1.2rem; }
+        /* عنوان الصفحة وتنقل التاريخ */
+        .page-header { text-align: center; margin: 15px 0; }
+        .page-title { font-size: 1.4rem; font-weight: bold; margin: 0; }
+        .date-navigator { display: flex; align-items: center; justify-content: center; gap: 15px; color: #64748b; font-size: 0.85rem; margin-top: 5px; }
+        .nav-arrow { background: white; border: 1px solid var(--border-color); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #334155; }
 
-        input, select, button { width: 100%; padding: 10px 12px; margin: 6px 0; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; }
-        input:focus, select:focus { outline: none; border-color: var(--primary); }
-        
-        .btn-primary { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
-        .btn-success { background: var(--success); color: white; border: none; font-weight: bold; cursor: pointer; }
-        .btn-danger { background: var(--danger); color: white; border: none; font-weight: bold; cursor: pointer; padding: 6px 10px; width: auto; font-size: 0.85rem; }
+        /* شبكة اليومية */
+        .grid-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+        .daily-card { background: var(--card-bg); border-radius: 16px; padding: 15px; text-align: center; border: 1px solid var(--border-color); }
+        .daily-card.expense-card { background: #fffbeb; border-color: #fef3c7; }
+        .card-title { font-size: 0.85rem; color: #64748b; margin-bottom: 8px; font-weight: bold; }
+        .card-value { font-size: 1.4rem; font-weight: bold; }
+        .val-red { color: var(--accent-red); }
+        .val-green { color: var(--accent-green); }
+        .val-dark { color: #0f172a; }
 
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
-        .product-card { background: #f8fafc; padding: 12px; border-radius: 8px; text-align: center; cursor: pointer; border: 1px solid #e2e8f0; }
-        .product-card:hover { border-color: var(--primary); background: #f1f5f9; }
+        /* صافي الصندوق */
+        .net-box { display: flex; justify-content: space-between; align-items: center; margin: 25px 5px 15px 5px; }
+        .net-title { font-size: 1.1rem; font-weight: bold; }
+        .net-value { font-size: 1.3rem; font-weight: bold; color: #0f172a; }
 
-        .flex-row { display: flex; gap: 8px; }
+        /* الأزرار الرئيسية */
+        .btn-black { background: #0f172a; color: white; border: none; width: 100%; padding: 14px; border-radius: 25px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-white { background: white; color: #0f172a; border: 1px solid var(--border-color); width: 100%; padding: 14px; border-radius: 25px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+
+        /* القائمة السفلية */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
+        .nav-btn { background: none; border: none; text-align: center; color: #64748b; font-size: 0.75rem; cursor: pointer; flex: 1; }
+        .nav-btn.active { color: var(--accent-gold); font-weight: bold; }
+        .nav-btn.active .nav-icon { background: #fef3c7; border-radius: 20px; padding: 2px 12px; }
+        .nav-icon { display: block; font-size: 1.2rem; margin-bottom: 2px; }
+
+        input, select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; margin-bottom: 10px; font-size: 1rem; }
     </style>
 </head>
 <body>
 
     <!-- الهيدر -->
     <div class="top-bar">
-        <div>
-            <h2>🛒 أبو ناصر ماركت</h2>
-            <small style="color: #94a3b8;">متصل بالإنترنت ✓</small>
+        <div class="user-info">
+            <div class="avatar">M</div>
+            <div>
+                <div class="user-title">...hammed</div>
+                <div class="user-date" id="headerDate">19/10/2026</div>
+                <div class="debt-box"><span id="headerTotalDebts">15.00</span> <span class="debt-label">إجمالي الديون شيكل</span></div>
+            </div>
         </div>
         <div>
-            <span>إجمالي الديون: </span>
-            <span class="total-badge" id="totalDebtsBadge">0.00 شيكل</span>
+            <span class="status-badge">متصل ✓</span>
         </div>
     </div>
 
     <div class="container">
 
-        <!-- 1. قسم طلبية -->
-        <div id="tab-order" class="tab-content active">
-            <div class="card">
-                <h3>1. من هو الزبون؟</h3>
-                <select id="orderCustomerSelect"></select>
-            </div>
-            <div class="card">
-                <h3>2. اختر الأصناف التي أخذها</h3>
-                <div class="product-grid" id="productsGrid"></div>
-            </div>
-            <div class="card" style="text-align: center;">
-                <h3>المجموع: <span id="cartTotal" style="color:var(--danger)">0.00</span> شيكل</h3>
-                <div class="flex-row">
-                    <button class="btn-primary" onclick="checkout('account')">تسجيل على الحساب</button>
-                    <button class="btn-success" onclick="checkout('cash')">بيع فوري (كاش)</button>
+        <!-- قسم اليومية -->
+        <div id="tab-daily" class="tab-content active">
+            <div class="page-header">
+                <h1 class="page-title">يومية اليوم</h1>
+                <div class="date-navigator">
+                    <button class="nav-arrow" onclick="changeDate(-1)">❯</button>
+                    <span id="currentDailyDate">الإثنين 19/10/2026</span>
+                    <button class="nav-arrow" onclick="changeDate(1)">❮</button>
                 </div>
             </div>
+
+            <div class="grid-cards">
+                <div class="daily-card">
+                    <div class="card-title">مبيعات على الحساب</div>
+                    <div class="card-value val-red" id="accountSalesVal">0.00</div>
+                </div>
+                <div class="daily-card">
+                    <div class="card-title">مبيعات فورية</div>
+                    <div class="card-value val-gold" id="cashSalesVal" style="color:#d97706">0.00</div>
+                </div>
+                <div class="daily-card">
+                    <div class="card-title">ديون مسدَّدة</div>
+                    <div class="card-value val-green" id="paidDebtsVal">0.00</div>
+                </div>
+                <div class="daily-card expense-card">
+                    <div class="card-title" style="color:#b45309">مصاريف ▾</div>
+                    <div class="card-value val-dark" id="expensesVal">0.00</div>
+                </div>
+            </div>
+
+            <div class="daily-card" style="margin-top: 12px; grid-column: span 2;">
+                <div class="card-title">عدد الحركات</div>
+                <div class="card-value val-dark" id="totalTxCount">0</div>
+            </div>
+
+            <div class="net-box">
+                <div class="net-title">صافي الصندوق اليوم</div>
+                <div class="net-value"><span id="netBoxVal">0.00</span> شيكل</div>
+            </div>
+
+            <button class="btn-black" onclick="closeBox()"><span style="font-size:1.1rem">🔒</span> إغلاق الصندوق</button>
+            <button class="btn-white" onclick="openExpenseModal()">+ تسجيل مصروف</button>
         </div>
 
-        <!-- 2. قسم الأصناف (إضافة منتجات) -->
-        <div id="tab-products" class="tab-content">
-            <div class="card">
-                <h3>إضافة صنف / منتج جديد</h3>
-                <input type="text" id="newProdName" placeholder="اسم الصنف (مثال: سكر، شيبس...)">
-                <input type="number" id="newProdPrice" placeholder="السعر بالشيكل" step="0.5">
-                <button class="btn-primary" onclick="addProduct()">+ حفظ الصنف وإضافته</button>
-            </div>
-            <div class="card">
-                <h3>قائمة الأصناف المتاحة</h3>
-                <div id="productsListContainer"></div>
-            </div>
-        </div>
-
-        <!-- 3. قسم الزبائن -->
-        <div id="tab-customers" class="tab-content">
-            <div class="card">
-                <h3>إضافة زبون جديد</h3>
-                <input type="text" id="newCustName" placeholder="اسم الزبون">
-                <input type="tel" id="newCustPhone" placeholder="رقم الجوال">
-                <button class="btn-primary" onclick="addCustomer()">+ إضافة زبون</button>
-            </div>
-            <div class="card">
-                <h3>قائمة الزبائن والحسابات</h3>
-                <div id="customersListContainer"></div>
-            </div>
-        </div>
-
-        <!-- 4. قسم يومية الصندوق -->
-        <div id="tab-daily" class="tab-content">
-            <div class="card">
-                <h3>حركة صندوق اليوم</h3>
-                <p>مبيعات على الحساب: <strong id="dailyAccountSales">0.00</strong> شيكل</p>
-                <p>مبيعات فورية (كاش): <strong id="dailyCashSales">0.00</strong> شيكل</p>
-                <hr>
-                <h3>صافي الصندوق: <span id="netCash" style="color:var(--success)">0.00</span> شيكل</h3>
-            </div>
-            <div class="card">
-                <h3>سجل الحركات اليومية</h3>
-                <div id="dailyTransactionsList"></div>
-            </div>
-        </div>
-
-        <!-- 5. قسم التقارير -->
-        <div id="tab-reports" class="tab-content">
-            <div class="card">
-                <h3>التقارير المالية</h3>
-                <p>مجموع الديون المتراكمة: <strong id="reportTotalDebts" style="color:var(--danger)">0.00</strong> شيكل</p>
-                <p>إجمالي الحركات المسجلة: <strong id="reportTotalTx">0</strong> حركة</p>
-            </div>
-        </div>
+        <!-- باقي الأقسام المؤقتة -->
+        <div id="tab-order" class="tab-content"><h2 style="text-align:center;">صفحة الطلبية</h2></div>
+        <div id="tab-customers" class="tab-content"><h2 style="text-align:center;">صفحة الزبائن</h2></div>
+        <div id="tab-reports" class="tab-content"><h2 style="text-align:center;">صفحة التقارير</h2></div>
+        <div id="tab-late" class="tab-content"><h2 style="text-align:center;">صفحة المتأخرين</h2></div>
 
     </div>
 
-    <!-- شريط التنقل السفلي -->
-    <div class="nav-bar">
-        <button class="nav-item active" onclick="switchTab('order', this)"><span>📝</span>طلبية</button>
-        <button class="nav-item" onclick="switchTab('products', this)"><span>📦</span>الأصناف</button>
-        <button class="nav-item" onclick="switchTab('customers', this)"><span>👥</span>الزبائن</button>
-        <button class="nav-item" onclick="switchTab('daily', this)"><span>📅</span>اليوم</button>
-        <button class="nav-item" onclick="switchTab('reports', this)"><span>📊</span>تقارير</button>
-    </div>
-
-    <script>
-        let data = {
-            customers: [{id: 1, name: 'محمد', phone: '0599016452', balance: 15.00}],
-            products: [
-                {id: 1, name: 'موز', price: 2.00},
-                {id: 2, name: 'عجوة', price: 5.00}
-            ],
-            transactions: []
-        };
-
-        try {
-            let saved = localStorage.getItem('abu_nasser_pos_v3');
-            if (saved) {
-                let parsed = JSON.parse(saved);
-                if (parsed && parsed.customers) data = parsed;
-            }
-        } catch (e) {
-            console.error("Storage error:", e);
-        }
-
-        let currentCart = [];
-
-        function saveData() {
-            try {
-                localStorage.setItem('abu_nasser_pos_v3', JSON.stringify(data));
-            } catch(e) {}
-            updateUI();
-        }
-
-        function switchTab(tabId, btn) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
-            let targetTab = document.getElementById('tab-' + tabId);
-            if (targetTab) targetTab.classList.add('active');
-            if (btn) btn.classList.add('active');
-        }
-
-        function updateUI() {
-            try {
-                let totalDebts = data.customers.reduce((acc, c) => acc + (c.balance || 0), 0);
-                document.getElementById('totalDebtsBadge').textContent = totalDebts.toFixed(2) + ' شيكل';
-                document.getElementById('reportTotalDebts').textContent = totalDebts.toFixed(2) + ' شيكل';
-
-                // قائمة الزبائن في الطلبية
-                let select = document.getElementById('orderCustomerSelect');
-                if (select) {
-                    select.innerHTML = '';
-                    data.customers.forEach(c => {
-                        let opt = document.createElement('option');
-                        opt.value = c.id;
-                        opt.textContent = `${c.name} (الدين الحالي: ${c.balance} شيكل)`;
-                        select.appendChild(opt);
-                    });
-                }
-
-                // عرض المنتجات في الطلبية
-                let grid = document.getElementById('productsGrid');
-                if (grid) {
-                    grid.innerHTML = '';
-                    data.products.forEach(p => {
-                        let div = document.createElement('div');
-                        div.className = 'product-card';
-                        div.innerHTML = `<strong>${p.name}</strong><br><small style="color:#64748b;">${p.price} شيكل</small>`;
-                        div.onclick = () => addToCart(p);
-                        grid.appendChild(div);
-                    });
-                }
-
-                // عرض وتعديل الأصناف في صفحة الأصناف
-                let prodList = document.getElementById('productsListContainer');
-                if (prodList) {
-                    prodList.innerHTML = '';
-                    data.products.forEach(p => {
-                        let div = document.createElement('div');
-                        div.style.cssText = 'padding:8px 0; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;';
-                        div.innerHTML = `<div><strong>${p.name}</strong> - <span style="color:var(--primary);">${p.price} شيكل</span></div>`;
-                        let delBtn = document.createElement('button');
-                        delBtn.className = 'btn-danger';
-                        delBtn.textContent = 'حذف';
-                        delBtn.onclick = () => deleteProduct(p.id);
-                        div.appendChild(delBtn);
-                        prodList.appendChild(div);
-                    });
-                }
-
-                // قائمة الزبائن الكاملة
-                let custContainer = document.getElementById('customersListContainer');
-                if (custContainer) {
-                    custContainer.innerHTML = '';
-                    data.customers.forEach(c => {
-                        let div = document.createElement('div');
-                        div.style.cssText = 'padding:10px 0; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;';
-                        div.innerHTML = `<div><strong>👤 ${c.name}</strong><br><small style="color:#64748b;">📱 ${c.phone || 'بدون رقم'}</small></div><div style="color:var(--danger); font-weight:bold;">${c.balance.toFixed(2)} شيكل</div>`;
-                        custContainer.appendChild(div);
-                    });
-                }
-
-                // اليومية والتقارير
-                let cashSales = data.transactions.filter(t => t.type === 'cash').reduce((acc, t) => acc + t.amount, 0);
-                let accountSales = data.transactions.filter(t => t.type === 'account').reduce((acc, t) => acc + t.amount, 0);
-                
-                document.getElementById('dailyCashSales').textContent = cashSales.toFixed(2);
-                document.getElementById('dailyAccountSales').textContent = accountSales.toFixed(2);
-                document.getElementById('netCash').textContent = cashSales.toFixed(2);
-                document.getElementById('reportTotalTx').textContent = data.transactions.length;
-
-                let dailyList = document.getElementById('dailyTransactionsList');
-                if (dailyList) {
-                    dailyList.innerHTML = '';
-                    if (data.transactions.length === 0) {
-                        dailyList.innerHTML = '<p style="text-align:center; color:#64748b;">لا توجد حركات اليوم</p>';
-                    } else {
-                        data.transactions.slice().reverse().forEach(t => {
-                            let d = document.createElement('div');
-                            d.style.cssText = 'padding:8px 0; border-bottom:1px solid #f1f5f9; font-size:0.9rem;';
-                            d.innerHTML = `<b>${t.title}</b> - <strong>${t.amount} شيكل</strong> (${t.type === 'cash' ? 'كاش فوري' : 'على الحساب'}) <br><small style="color:#64748b;">${t.date}</small>`;
-                            dailyList.appendChild(d);
-                        });
-                    }
-                }
-            } catch (err) {
-                console.error("UI update error:", err);
-            }
-        }
-
-        function addToCart(product) {
-            currentCart.push(product);
-            let total = currentCart.reduce((acc, p) => acc + p.price, 0);
-            document.getElementById('cartTotal').textContent = total.toFixed(2);
-        }
-
-        function checkout(type) {
-            if (currentCart.length === 0) {
-                alert('الرجاء اختيار أصناف أولاً!');
-                return;
-            }
-            let total = currentCart.reduce((acc, p) => acc + p.price, 0);
-            let customerId = document.getElementById('orderCustomerSelect').value;
-            let customer = data.customers.find(c => c.id == customerId);
-
-            if (type === 'account' && customer) {
-                customer.balance += total;
-            }
-
-            data.transactions.push({
-                title: currentCart.map(p => p.name).join(' + '),
-                amount: total,
-                type: type,
-                date: new Date().toLocaleDateString('ar-EG')
-            });
-
-            currentCart = [];
-            document.getElementById('cartTotal').textContent = '0.00';
-            saveData();
-            alert('تمت العملية بنجاح!');
-        }
-
-        function addProduct() {
-            let nameInput = document.getElementById('newProdName');
-            let priceInput = document.getElementById('newProdPrice');
-            let name = nameInput.value.trim();
-            let price = parseFloat(priceInput.value);
-
-            if (name && !isNaN(price)) {
-                data.products.push({ id: Date.now(), name, price });
-                nameInput.value = '';
-                priceInput.value = '';
-                saveData();
-                alert('تم إضافة الصنف بنجاح');
-            } else {
-                alert('الرجاء إدخال اسم الصنف والسعر بشكل صحيح');
-            }
-        }
-
-        function deleteProduct(id) {
-            data.products = data.products.filter(p => p.id !== id);
-            saveData();
-        }
-
-        function addCustomer() {
-            let nameInput = document.getElementById('newCustName');
-            let phoneInput = document.getElementById('newCustPhone');
-            let name = nameInput.value.trim();
-            let phone = phoneInput.value.trim();
-            
-            if (name) {
-                data.customers.push({ id: Date.now(), name, phone, balance: 0.00 });
-                nameInput.value = '';
-                phoneInput.value = '';
-                saveData();
-                alert('تم إضافة الزبون بنجاح');
-            } else {
-                alert('الرجاء إدخال اسم الزبون');
-            }
-        }
-
-        updateUI();
-    </script>
-</body>
-</html>
+    <!-- شريط التنقل السفلي المطابق -->
+    <div class="bottom-nav">
+        <button class="nav-btn" onclick="
