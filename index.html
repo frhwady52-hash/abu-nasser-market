@@ -123,4 +123,205 @@
         <!-- 2. قسم الزبائن -->
         <div id="tab-customers" class="tab-content">
             <div class="card">
-                <h3>إضافة زب
+                <h3>إضافة زبون جديد</h3>
+                <input type="text" id="newCustName" placeholder="اسم الزبون">
+                <input type="tel" id="newCustPhone" placeholder="رقم الجوال">
+                <button class="btn-primary" onclick="addCustomer()">+ إضافة زبون</button>
+            </div>
+            <div class="card">
+                <h3>قائمة الزبائن</h3>
+                <div id="customersListContainer"></div>
+            </div>
+        </div>
+
+        <!-- 3. قسم يومية اليوم -->
+        <div id="tab-daily" class="tab-content active">
+            <div class="page-header">
+                <h1 class="page-title">يومية اليوم</h1>
+                <div class="date-navigator">
+                    <button class="nav-arrow">❯</button>
+                    <span>الإثنين 19/10/2026</span>
+                    <button class="nav-arrow">❮</button>
+                </div>
+            </div>
+
+            <div class="grid-cards">
+                <div class="daily-card">
+                    <div class="card-title">مبيعات على الحساب</div>
+                    <div class="card-value val-red" id="accountSalesVal">0.00</div>
+                </div>
+                <div class="daily-card">
+                    <div class="card-title">مبيعات فورية</div>
+                    <div class="card-value" style="color:#d97706" id="cashSalesVal">0.00</div>
+                </div>
+                <div class="daily-card">
+                    <div class="card-title">ديون مسدَّدة</div>
+                    <div class="card-value val-green" id="paidDebtsVal">0.00</div>
+                </div>
+                <div class="daily-card expense-card">
+                    <div class="card-title" style="color:#b45309">مصاريف ▾</div>
+                    <div class="card-value" style="color:#1e293b" id="expensesVal">0.00</div>
+                </div>
+            </div>
+
+            <div class="daily-card" style="margin-top: 10px;">
+                <div class="card-title">عدد الحركات</div>
+                <div class="card-value" id="totalTxCount">0</div>
+            </div>
+
+            <div class="net-box">
+                <div class="net-title">صافي الصندوق اليوم</div>
+                <div class="net-value"><span id="netBoxVal">0.00</span> شيكل</div>
+            </div>
+
+            <button class="btn-black" onclick="alert('تم إغلاق الصندوق بنجاح')"><span style="font-size:1.1rem">🔒</span> إغلاق الصندوق</button>
+            <button class="btn-white" onclick="openExpenseModal()">+ تسجيل مصروف</button>
+        </div>
+
+        <!-- 4. قسم التقارير -->
+        <div id="tab-reports" class="tab-content">
+            <div class="card">
+                <h3>التقارير المالية</h3>
+                <p>إجمالي الديون المتراكمة: <strong id="reportTotalDebts" style="color:var(--accent-red)">15.00</strong> شيكل</p>
+                <p>إجمالي الحركات: <strong id="reportTotalTx">0</strong></p>
+            </div>
+        </div>
+
+        <!-- 5. قسم المتأخرين -->
+        <div id="tab-late" class="tab-content">
+            <div class="card">
+                <h3>الزبائن المتأخرون في السداد</h3>
+                <p style="text-align:center; color:#64748b; padding:15px;">لا يوجد متأخرون ✓</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- شريط التنقل السفلي -->
+    <div class="bottom-nav">
+        <button class="nav-btn" onclick="switchTab('order', this)"><span class="nav-icon">✏️</span>طلبية</button>
+        <button class="nav-btn" onclick="switchTab('customers', this)"><span class="nav-icon">👥</span>الزبائن</button>
+        <button class="nav-btn active" onclick="switchTab('daily', this)"><span class="nav-icon">🕒</span>اليوم</button>
+        <button class="nav-btn" onclick="switchTab('reports', this)"><span class="nav-icon">📈</span>تقارير</button>
+        <button class="nav-btn" onclick="switchTab('late', this)"><span class="nav-icon">⚠️</span>متأخرين</button>
+    </div>
+
+    <script>
+        let appData = {
+            customers: [{id: 1, name: 'محمد', phone: '0599016452', balance: 15.00}],
+            products: [{id: 1, name: 'موز', price: 2.00}, {id: 2, name: 'عجوة', price: 5.00}],
+            daily: { accountSales: 0.00, cashSales: 0.00, paidDebts: 0.00, expenses: 0.00, txCount: 0 }
+        };
+
+        let currentCart = [];
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(e => e.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabId).classList.add('active');
+            btn.classList.add('active');
+            updateUI();
+        }
+
+        function updateUI() {
+            let totalDebts = appData.customers.reduce((acc, c) => acc + c.balance, 0);
+            document.getElementById('headerTotalDebts').textContent = totalDebts.toFixed(2);
+            document.getElementById('reportTotalDebts').textContent = totalDebts.toFixed(2) + ' شيكل';
+
+            let select = document.getElementById('orderCustomerSelect');
+            if(select) {
+                select.innerHTML = '';
+                appData.customers.forEach(c => {
+                    let opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = `${c.name} (${c.balance} شيكل)`;
+                    select.appendChild(opt);
+                });
+            }
+
+            let grid = document.getElementById('productsGrid');
+            if(grid) {
+                grid.innerHTML = '';
+                appData.products.forEach(p => {
+                    let div = document.createElement('div');
+                    div.className = 'product-card';
+                    div.innerHTML = `<strong>${p.name}</strong><br><small>${p.price} شيكل</small>`;
+                    div.onclick = () => addToCart(p);
+                    grid.appendChild(div);
+                });
+            }
+
+            let custCont = document.getElementById('customersListContainer');
+            if(custCont) {
+                custCont.innerHTML = '';
+                appData.customers.forEach(c => {
+                    let d = document.createElement('div');
+                    d.style.cssText = 'padding:8px 0; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between;';
+                    d.innerHTML = `<span>👤 ${c.name}</span><strong style="color:var(--accent-red)">${c.balance} شيكل</strong>`;
+                    custCont.appendChild(d);
+                });
+            }
+
+            document.getElementById('accountSalesVal').textContent = appData.daily.accountSales.toFixed(2);
+            document.getElementById('cashSalesVal').textContent = appData.daily.cashSales.toFixed(2);
+            document.getElementById('paidDebtsVal').textContent = appData.daily.paidDebts.toFixed(2);
+            document.getElementById('expensesVal').textContent = appData.daily.expenses.toFixed(2);
+            document.getElementById('totalTxCount').textContent = appData.daily.txCount;
+
+            let net = (appData.daily.cashSales + appData.daily.paidDebts) - appData.daily.expenses;
+            document.getElementById('netBoxVal').textContent = net.toFixed(2);
+            document.getElementById('reportTotalTx').textContent = appData.daily.txCount;
+        }
+
+        function addToCart(p) {
+            currentCart.push(p);
+            let total = currentCart.reduce((acc, x) => acc + x.price, 0);
+            document.getElementById('cartTotal').textContent = total.toFixed(2);
+        }
+
+        function checkout(type) {
+            if(currentCart.length === 0) { alert('اختر أصناف أولاً'); return; }
+            let total = currentCart.reduce((acc, x) => acc + x.price, 0);
+            let custId = document.getElementById('orderCustomerSelect').value;
+            let cust = appData.customers.find(c => c.id == custId);
+
+            if(type === 'account' && cust) {
+                cust.balance += total;
+                appData.daily.accountSales += total;
+            } else {
+                appData.daily.cashSales += total;
+            }
+
+            appData.daily.txCount++;
+            currentCart = [];
+            document.getElementById('cartTotal').textContent = '0.00';
+            updateUI();
+            alert('تمت العملية بنجاح!');
+        }
+
+        function addCustomer() {
+            let name = document.getElementById('newCustName').value.trim();
+            let phone = document.getElementById('newCustPhone').value.trim();
+            if(name) {
+                appData.customers.push({ id: Date.now(), name, phone, balance: 0.00 });
+                document.getElementById('newCustName').value = '';
+                document.getElementById('newCustPhone').value = '';
+                updateUI();
+                alert('تم إضافة الزبون');
+            }
+        }
+
+        function openExpenseModal() {
+            let val = prompt("أدخل قيمة المصروف بالشيكل:");
+            if(val && !isNaN(val)) {
+                appData.daily.expenses += parseFloat(val);
+                appData.daily.txCount++;
+                updateUI();
+            }
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
