@@ -29,7 +29,7 @@
         .card h3 { margin-top: 0; color: var(--primary); font-size: 1.1rem; }
         
         .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; border-top: 1px solid #cbd5e1; padding: 8px 0; z-index: 1000; box-shadow: 0 -2px 5px rgba(0,0,0,0.05); }
-        .nav-item { text-align: center; color: #64748b; font-size: 0.8rem; cursor: pointer; background: none; border: none; flex: 1; }
+        .nav-item { text-align: center; color: #64748b; font-size: 0.75rem; cursor: pointer; background: none; border: none; flex: 1; }
         .nav-item.active { color: var(--primary); font-weight: bold; }
         .nav-item span { display: block; font-size: 1.2rem; }
 
@@ -38,7 +38,7 @@
         
         .btn-primary { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
         .btn-success { background: var(--success); color: white; border: none; font-weight: bold; cursor: pointer; }
-        .btn-danger { background: var(--danger); color: white; border: none; font-weight: bold; cursor: pointer; }
+        .btn-danger { background: var(--danger); color: white; border: none; font-weight: bold; cursor: pointer; padding: 6px 10px; width: auto; font-size: 0.85rem; }
 
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
         .product-card { background: #f8fafc; padding: 12px; border-radius: 8px; text-align: center; cursor: pointer; border: 1px solid #e2e8f0; }
@@ -82,7 +82,21 @@
             </div>
         </div>
 
-        <!-- 2. قسم الزبائن -->
+        <!-- 2. قسم الأصناف (إضافة منتجات) -->
+        <div id="tab-products" class="tab-content">
+            <div class="card">
+                <h3>إضافة صنف / منتج جديد</h3>
+                <input type="text" id="newProdName" placeholder="اسم الصنف (مثال: سكر، شيبس...)">
+                <input type="number" id="newProdPrice" placeholder="السعر بالشيكل" step="0.5">
+                <button class="btn-primary" onclick="addProduct()">+ حفظ الصنف وإضافته</button>
+            </div>
+            <div class="card">
+                <h3>قائمة الأصناف المتاحة</h3>
+                <div id="productsListContainer"></div>
+            </div>
+        </div>
+
+        <!-- 3. قسم الزبائن -->
         <div id="tab-customers" class="tab-content">
             <div class="card">
                 <h3>إضافة زبون جديد</h3>
@@ -96,7 +110,7 @@
             </div>
         </div>
 
-        <!-- 3. قسم يومية الصندوق -->
+        <!-- 4. قسم يومية الصندوق -->
         <div id="tab-daily" class="tab-content">
             <div class="card">
                 <h3>حركة صندوق اليوم</h3>
@@ -111,7 +125,7 @@
             </div>
         </div>
 
-        <!-- 4. قسم التقارير -->
+        <!-- 5. قسم التقارير -->
         <div id="tab-reports" class="tab-content">
             <div class="card">
                 <h3>التقارير المالية</h3>
@@ -125,13 +139,13 @@
     <!-- شريط التنقل السفلي -->
     <div class="nav-bar">
         <button class="nav-item active" onclick="switchTab('order', this)"><span>📝</span>طلبية</button>
+        <button class="nav-item" onclick="switchTab('products', this)"><span>📦</span>الأصناف</button>
         <button class="nav-item" onclick="switchTab('customers', this)"><span>👥</span>الزبائن</button>
         <button class="nav-item" onclick="switchTab('daily', this)"><span>📅</span>اليوم</button>
         <button class="nav-item" onclick="switchTab('reports', this)"><span>📊</span>تقارير</button>
     </div>
 
     <script>
-        // تحميل البيانات بسلامة وحماية من الشاشات البيضاء
         let data = {
             customers: [{id: 1, name: 'محمد', phone: '0599016452', balance: 15.00}],
             products: [
@@ -142,7 +156,7 @@
         };
 
         try {
-            let saved = localStorage.getItem('abu_nasser_pos_v2');
+            let saved = localStorage.getItem('abu_nasser_pos_v3');
             if (saved) {
                 let parsed = JSON.parse(saved);
                 if (parsed && parsed.customers) data = parsed;
@@ -155,7 +169,7 @@
 
         function saveData() {
             try {
-                localStorage.setItem('abu_nasser_pos_v2', JSON.stringify(data));
+                localStorage.setItem('abu_nasser_pos_v3', JSON.stringify(data));
             } catch(e) {}
             updateUI();
         }
@@ -171,7 +185,6 @@
 
         function updateUI() {
             try {
-                // إجمالي الديون
                 let totalDebts = data.customers.reduce((acc, c) => acc + (c.balance || 0), 0);
                 document.getElementById('totalDebtsBadge').textContent = totalDebts.toFixed(2) + ' شيكل';
                 document.getElementById('reportTotalDebts').textContent = totalDebts.toFixed(2) + ' شيكل';
@@ -188,7 +201,7 @@
                     });
                 }
 
-                // عرض المنتجات
+                // عرض المنتجات في الطلبية
                 let grid = document.getElementById('productsGrid');
                 if (grid) {
                     grid.innerHTML = '';
@@ -198,6 +211,23 @@
                         div.innerHTML = `<strong>${p.name}</strong><br><small style="color:#64748b;">${p.price} شيكل</small>`;
                         div.onclick = () => addToCart(p);
                         grid.appendChild(div);
+                    });
+                }
+
+                // عرض وتعديل الأصناف في صفحة الأصناف
+                let prodList = document.getElementById('productsListContainer');
+                if (prodList) {
+                    prodList.innerHTML = '';
+                    data.products.forEach(p => {
+                        let div = document.createElement('div');
+                        div.style.cssText = 'padding:8px 0; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;';
+                        div.innerHTML = `<div><strong>${p.name}</strong> - <span style="color:var(--primary);">${p.price} شيكل</span></div>`;
+                        let delBtn = document.createElement('button');
+                        delBtn.className = 'btn-danger';
+                        delBtn.textContent = 'حذف';
+                        delBtn.onclick = () => deleteProduct(p.id);
+                        div.appendChild(delBtn);
+                        prodList.appendChild(div);
                     });
                 }
 
@@ -273,6 +303,28 @@
             alert('تمت العملية بنجاح!');
         }
 
+        function addProduct() {
+            let nameInput = document.getElementById('newProdName');
+            let priceInput = document.getElementById('newProdPrice');
+            let name = nameInput.value.trim();
+            let price = parseFloat(priceInput.value);
+
+            if (name && !isNaN(price)) {
+                data.products.push({ id: Date.now(), name, price });
+                nameInput.value = '';
+                priceInput.value = '';
+                saveData();
+                alert('تم إضافة الصنف بنجاح');
+            } else {
+                alert('الرجاء إدخال اسم الصنف والسعر بشكل صحيح');
+            }
+        }
+
+        function deleteProduct(id) {
+            data.products = data.products.filter(p => p.id !== id);
+            saveData();
+        }
+
         function addCustomer() {
             let nameInput = document.getElementById('newCustName');
             let phoneInput = document.getElementById('newCustPhone');
@@ -290,7 +342,6 @@
             }
         }
 
-        // التشغيل الأولي
         updateUI();
     </script>
 </body>
