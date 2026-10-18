@@ -3,169 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أبو ناصر ماركت - الدفتر المحاسبي</title>
+    <title>أبو ناصر ماركت - الدفتر الرقمي</title>
     <style>
         :root {
-            --paper-bg: #fdfbf7;
-            --paper-line: #e6dfcc;
-            --primary-brown: #3e2723;
-            --accent-red: #b71c1c;
-            --accent-green: #1b5e20;
-            --border-color: #d7ccc8;
+            --primary-color: #0f766e;
+            --accent-color: #f59e0b;
+            --success-color: #16a34a;
+            --danger-color: #dc2626;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
         }
 
+        * { box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #efebe9;
-            color: var(--primary-brown);
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
             padding: 0;
         }
 
         .header {
-            background-color: #3e2723;
-            color: #fff8e1;
+            background-color: #0f172a;
+            color: white;
             padding: 1.2rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            border-bottom: 4px solid #8d6e63;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
-        .header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-
-        .header h1 span {
-            color: #ffb300;
-        }
-
-        .header p {
-            margin: 4px 0 0 0;
-            font-size: 0.85rem;
-            color: #d7ccc8;
-        }
+        .header h1 { margin: 0; font-size: 1.4rem; }
+        .header h1 span { color: var(--accent-color); }
+        .header p { margin: 4px 0 0 0; font-size: 0.85rem; color: #94a3b8; }
 
         .badge {
             padding: 0.4rem 0.8rem;
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: bold;
+            white-space: nowrap;
         }
-        .badge.online { background-color: #2e7d32; color: white; }
-        .badge.offline { background-color: #c62828; color: white; }
+        .badge.online { background-color: var(--success-color); color: white; }
+        .badge.offline { background-color: var(--danger-color); color: white; }
 
-        .container {
-            max-width: 850px;
-            margin: 1.5rem auto;
-            padding: 0 1rem;
-        }
+        .container { max-width: 800px; margin: 1.5rem auto; padding: 0 1rem; }
 
-        /* تصميم يشبه صفحة الدفتر */
         .card {
-            background: var(--paper-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 3px 3px 10px rgba(0,0,0,0.08);
-            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
-            background-size: 100% 30px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
-        .card h2 {
-            margin-top: 0;
-            font-size: 1.25rem;
-            color: #4e342e;
-            border-bottom: 2px dashed #bcaaa4;
-            padding-bottom: 0.5rem;
-        }
+        .card h2 { margin-top: 0; font-size: 1.2rem; color: var(--primary-color); }
 
-        .card-header {
+        /* أزرار التبديل بين الزبائن والموردين */
+        .tab-buttons {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 1rem;
         }
 
-        .form-group, .form-inline {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--primary-color);
+            background: transparent;
+            color: var(--primary-color);
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
         }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .form-group, .form-inline { display: flex; gap: 10px; flex-wrap: wrap; }
 
         input, select, button {
             padding: 0.75rem;
-            border: 1px solid #a1887f;
-            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
             font-size: 0.95rem;
-            background: #fff;
         }
 
-        input:focus, select:focus {
-            outline: none;
-            border-color: #3e2723;
-            box-shadow: 0 0 0 2px rgba(62, 39, 35, 0.2);
-        }
+        input:focus, select:focus { outline: none; border-color: var(--primary-color); }
+        input, select { flex: 1; min-width: 140px; }
 
-        input, select {
-            flex: 1;
-            min-width: 140px;
-        }
-
-        .btn {
-            cursor: pointer;
-            border: none;
-            color: white;
-            font-weight: bold;
-            border-radius: 6px;
-        }
-
-        .btn-primary { background-color: #4e342e; }
-        .btn-primary:hover { background-color: #3e2723; }
-        .btn-success { background-color: #2e7d32; }
+        .btn { cursor: pointer; border: none; color: white; font-weight: bold; border-radius: 8px; }
+        .btn-primary { background-color: var(--primary-color); }
+        .btn-success { background-color: var(--success-color); }
 
         .customer-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0.9rem;
-            background: rgba(255, 255, 255, 0.8);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #e2e8f0;
             cursor: pointer;
-            margin-bottom: 5px;
-            border-radius: 4px;
+            border-radius: 8px;
+            transition: background 0.2s;
         }
 
-        .customer-item:hover {
-            background-color: #fffde7;
-        }
+        .customer-item:hover { background-color: #f8fafc; }
 
-        .balance.positive { color: var(--accent-red); font-weight: bold; }
-        .balance.negative { color: var(--accent-green); font-weight: bold; }
+        .balance.positive { color: var(--danger-color); font-weight: bold; }
+        .balance.negative { color: var(--success-color); font-weight: bold; }
 
         /* Modal */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(15, 23, 42, 0.6);
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
 
         .modal-content {
-            background: #fdfbf7;
-            border: 3px solid #8d6e63;
+            background: white;
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 12px;
             width: 92%;
-            max-width: 700px;
+            max-width: 650px;
             max-height: 85vh;
             overflow-y: auto;
             position: relative;
@@ -176,46 +144,37 @@
             left: 1rem; top: 0.8rem;
             font-size: 1.8rem;
             cursor: pointer;
-            color: #4e342e;
+            color: #64748b;
         }
 
         .summary-box {
-            background: #fff8e1;
-            border: 1px solid #ffe082;
+            background: #f1f5f9;
             padding: 0.8rem 1rem;
-            border-radius: 6px;
+            border-radius: 8px;
             margin: 1rem 0;
             font-size: 1.1rem;
-            font-weight: bold;
+            border-right: 4px solid var(--primary-color);
         }
 
-        .table-wrapper {
-            overflow-x: auto;
-        }
+        .table-wrapper { overflow-x: auto; }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 1rem;
-            background: #fff;
             font-size: 0.9rem;
         }
 
-        th, td {
-            border: 1px solid #bcaaa4;
-            padding: 8px;
-            text-align: right;
-        }
-
-        th { background-color: #d7ccc8; color: #3e2723; }
+        th, td { border: 1px solid #e2e8f0; padding: 8px; text-align: right; }
+        th { background-color: #f8fafc; }
     </style>
 </head>
 <body>
 
     <header class="header">
         <div class="logo">
-            <h1>📒 أبو ناصر <span>للديون والحسابات</span></h1>
-            <p>دفتر الحسابات الورقي الرقمي</p>
+            <h1>🛒 أبو ناصر <span>ماركت</span></h1>
+            <p>دفتر الحسابات، الزبائن والموردين</p>
         </div>
         <div class="status-bar">
             <span id="connectionStatus" class="badge online">📡 متصل</span>
@@ -223,52 +182,55 @@
     </header>
 
     <main class="container">
-        <!-- قسم إضافة زبون -->
+        <!-- أزرار التبديل بين الزبائن والموردين -->
+        <div class="tab-buttons">
+            <button class="tab-btn active" id="btnCustomers" onclick="switchTab('customer')">👥 الزبائن</button>
+            <button class="tab-btn" id="btnSuppliers" onclick="switchTab('supplier')">🚚 الموردين (تجار الجملة)</button>
+        </div>
+
+        <!-- إضافة حساب -->
         <section class="card">
-            <h2>+ إضافة حساب جديد في الدفتر</h2>
-            <form id="addCustomerForm" class="form-group">
-                <input type="text" id="customerName" placeholder="اسم الزبون / التاجر" required>
-                <input type="tel" id="customerPhone" placeholder="رقم الهاتف">
-                <button type="submit" class="btn btn-primary">إضافة للدفتر</button>
+            <h2 id="addFormTitle">إضافة زبون جديد</h2>
+            <form id="addAccountForm" class="form-group">
+                <input type="text" id="accountName" placeholder="الاسم" required>
+                <input type="tel" id="accountPhone" placeholder="رقم الجوال">
+                <button type="submit" class="btn btn-primary" id="addBtnText">+ إضافة للحسابات</button>
             </form>
         </section>
 
-        <!-- قائمة الزبائن -->
+        <!-- القائمة -->
         <section class="card">
-            <div class="card-header">
-                <h2>📑 صفحة الحسابات والديون</h2>
-                <input type="text" id="searchCustomer" placeholder="🔍 بحث في الدفتر..." onkeyup="searchCustomers()">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 1rem;">
+                <h2 id="listTitle" style="margin: 0;">قائمة حسابات الزبائن</h2>
+                <input type="text" id="searchAccount" placeholder="🔍 بحث..." onkeyup="searchAccounts()">
             </div>
-            <div id="customersList" class="customers-list"></div>
+            <div id="accountsList"></div>
         </section>
 
-        <!-- نافذة كشف الحساب -->
+        <!-- النافذة (Modal) -->
         <div id="transactionModal" class="modal">
             <div class="modal-content">
                 <span class="close-btn" id="closeModal">&times;</span>
-                <h2 id="modalCustomerName">صفحة حساب الزبون</h2>
+                <h2 id="modalAccountName">كشف حساب</h2>
                 <div class="summary-box">
-                    <span>صافي الحساب بالدفتر: </span>
-                    <strong id="modalCustomerBalance">0</strong> شيكل
+                    <span>صافي الرصيد الحالي: </span>
+                    <strong id="modalAccountBalance">0</strong> شيكل
                 </div>
 
                 <form id="addTransactionForm" class="form-inline">
-                    <select id="transType">
-                        <option value="debit">🔴 بضاعة / طلبية (عليه)</option>
-                        <option value="credit">🟢 دفعة نقدية (له)</option>
-                    </select>
+                    <select id="transType"></select>
                     <input type="number" id="transAmount" placeholder="المبلغ" step="0.5" required>
-                    <input type="text" id="transNote" placeholder="البيان / التفاصيل">
-                    <button type="submit" class="btn btn-success">قيد بالدفتر</button>
+                    <input type="text" id="transNote" placeholder="البيان / تفاصيل الفاتورة">
+                    <button type="submit" class="btn btn-success">تسجيل الحركة</button>
                 </form>
 
-                <h3 style="margin-top: 1.5rem; border-bottom: 1px dashed #bcaaa4; padding-bottom: 5px;">سجل القيود والحركات</h3>
+                <h3 style="margin-top: 1.5rem;">سجل الحركة الحسابية</h3>
                 <div class="table-wrapper">
                     <table>
                         <thead>
                             <tr>
                                 <th>التاريخ</th>
-                                <th>نوع القيد</th>
+                                <th>نوع الحركة</th>
                                 <th>المبلغ</th>
                                 <th>البيان</th>
                             </tr>
@@ -281,16 +243,18 @@
     </main>
 
     <script>
-        const STORAGE_KEY = 'abu_nasser_notebook_customers';
-        let customers = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-        let currentCustomerId = null;
+        const STORAGE_KEY = 'abu_nasser_market_v2';
+        let accounts = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        let currentType = 'customer'; // customer أو supplier
+        let currentAccountId = null;
 
-        const addCustomerForm = document.getElementById('addCustomerForm');
-        const customersList = document.getElementById('customersList');
         const connectionStatus = document.getElementById('connectionStatus');
+        const addAccountForm = document.getElementById('addAccountForm');
+        const accountsList = document.getElementById('accountsList');
         const transactionModal = document.getElementById('transactionModal');
         const closeModal = document.getElementById('closeModal');
         const addTransactionForm = document.getElementById('addTransactionForm');
+        const transTypeSelect = document.getElementById('transType');
 
         window.addEventListener('online', updateOnlineStatus);
         window.addEventListener('offline', updateOnlineStatus);
@@ -306,125 +270,27 @@
         }
 
         function saveData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(customers));
-            renderCustomers(customers);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
+            renderAccounts();
         }
 
-        addCustomerForm.addEventListener('submit', (e) => {
+        function switchTab(type) {
+            currentType = type;
+            document.getElementById('btnCustomers').classList.toggle('active', type === 'customer');
+            document.getElementById('btnSuppliers').classList.toggle('active', type === 'supplier');
+            
+            document.getElementById('addFormTitle').textContent = type === 'customer' ? 'إضافة زبون جديد' : 'إضافة مورد / تاجر جملة جديد';
+            document.getElementById('listTitle').textContent = type === 'customer' ? 'قائمة حسابات الزبائن' : 'قائمة حسابات الموردين';
+            document.getElementById('accountName').placeholder = type === 'customer' ? 'اسم الزبون' : 'اسم المورد / الشركة';
+            
+            renderAccounts();
+        }
+
+        addAccountForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
+            const name = document.getElementById('accountName').value.trim();
+            const phone = document.getElementById('accountPhone').value.trim();
 
             if (name) {
-                customers.push({
-                    id: Date.now(),
-                    name: name,
-                    phone: phone,
-                    transactions: []
-                });
-                saveData();
-                addCustomerForm.reset();
-            }
-        });
-
-        function renderCustomers(listToRender) {
-            customersList.innerHTML = '';
-            if (listToRender.length === 0) {
-                customersList.innerHTML = '<p style="text-align:center; color:#5d4037; padding:1rem;">الدفتر فارغ حالياً.</p>';
-                return;
-            }
-
-            listToRender.forEach(customer => {
-                const balance = calculateBalance(customer.transactions);
-                const item = document.createElement('div');
-                item.className = 'customer-item';
-                item.innerHTML = `
-                    <div>
-                        <strong>📖 ${customer.name}</strong>
-                        <br><small style="color:#6d4c41;">📱 ${customer.phone || 'بدون رقم'}</small>
-                    </div>
-                    <div>
-                        <span class="balance ${balance > 0 ? 'positive' : 'negative'}">
-                            ${balance > 0 ? 'عليه: ' + balance : 'له: ' + Math.abs(balance)} شيكل
-                        </span>
-                    </div>
-                `;
-                item.addEventListener('click', () => openCustomerModal(customer.id));
-                customersList.appendChild(item);
-            });
-        }
-
-        function searchCustomers() {
-            const query = document.getElementById('searchCustomer').value.toLowerCase();
-            const filtered = customers.filter(c => 
-                c.name.toLowerCase().includes(query) || c.phone.includes(query)
-            );
-            renderCustomers(filtered);
-        }
-
-        function calculateBalance(transactions) {
-            return transactions.reduce((acc, t) => {
-                return t.type === 'debit' ? acc + t.amount : acc - t.amount;
-            }, 0);
-        }
-
-        function openCustomerModal(id) {
-            currentCustomerId = id;
-            const customer = customers.find(c => c.id === id);
-            if (!customer) return;
-
-            document.getElementById('modalCustomerName').textContent = `حساب الزبون: ${customer.name}`;
-            renderTransactions(customer);
-            transactionModal.style.display = 'flex';
-        }
-
-        closeModal.addEventListener('click', () => {
-            transactionModal.style.display = 'none';
-        });
-
-        addTransactionForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const type = document.getElementById('transType').value;
-            const amount = parseFloat(document.getElementById('transAmount').value);
-            const note = document.getElementById('transNote').value.trim();
-
-            const customer = customers.find(c => c.id === currentCustomerId);
-            if (customer && amount) {
-                customer.transactions.push({
-                    id: Date.now(),
-                    date: new Date().toLocaleDateString('ar-EG'),
-                    type: type,
-                    amount: amount,
-                    note: note || '-'
-                });
-                saveData();
-                renderTransactions(customer);
-                addTransactionForm.reset();
-            }
-        });
-
-        function renderTransactions(customer) {
-            const tbody = document.getElementById('transactionsTableBody');
-            const balanceEl = document.getElementById('modalCustomerBalance');
-            tbody.innerHTML = '';
-
-            const total = calculateBalance(customer.transactions);
-            balanceEl.textContent = total;
-
-            customer.transactions.forEach(t => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${t.date}</td>
-                    <td>${t.type === 'debit' ? '🔴 طلبية (عليه)' : '🟢 دفعة (له)'}</td>
-                    <td style="color: ${t.type === 'debit' ? '#b71c1c' : '#1b5e20'}; font-weight:bold;">${t.amount} شيكل</td>
-                    <td>${t.note}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        updateOnlineStatus();
-        renderCustomers(customers);
-    </script>
-</body>
-</html>
+                accounts.push({
+                    id:
