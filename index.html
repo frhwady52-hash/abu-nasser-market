@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أبو ناصر ماركت - يومية اليوم</title>
+    <title>أبو ناصر ماركت - النظام المحاسبي المتكامل</title>
     <style>
         :root {
             --primary-dark: #0f172a;
@@ -16,7 +16,7 @@
         }
 
         * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: #1e293b; margin: 0; padding-bottom: 80px; }
+        body { background-color: var(--bg-color); color: #1e293b; margin: 0; padding-bottom: 90px; }
 
         /* الهيدر العلوي */
         .top-bar {
@@ -33,46 +33,53 @@
         .user-date { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
         
         .status-badge { background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
-        .debt-box { margin-top: 8px; font-size: 1.2rem; font-weight: bold; color: var(--accent-red); }
-        .debt-label { font-size: 0.75rem; color: #64748b; font-weight: normal; }
+        .debt-box { margin-top: 4px; font-size: 1.1rem; font-weight: bold; color: var(--accent-red); }
+        .debt-label { font-size: 0.7rem; color: #64748b; font-weight: normal; }
 
         .container { max-width: 500px; margin: 10px auto; padding: 0 12px; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* عنوان الصفحة وتنقل التاريخ */
-        .page-header { text-align: center; margin: 15px 0; }
-        .page-title { font-size: 1.4rem; font-weight: bold; margin: 0; }
-        .date-navigator { display: flex; align-items: center; justify-content: center; gap: 15px; color: #64748b; font-size: 0.85rem; margin-top: 5px; }
-        .nav-arrow { background: white; border: 1px solid var(--border-color); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #334155; }
+        .card { background: var(--card-bg); border-radius: 14px; padding: 15px; margin-bottom: 12px; border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .card h3 { margin-top: 0; font-size: 1rem; color: #0f172a; }
 
-        /* شبكة اليومية */
-        .grid-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-        .daily-card { background: var(--card-bg); border-radius: 16px; padding: 15px; text-align: center; border: 1px solid var(--border-color); }
+        /* تنسيق أقسام الطلبية والمنتجات */
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+        .product-card { background: #f8fafc; padding: 12px; border-radius: 10px; text-align: center; cursor: pointer; border: 1px solid var(--border-color); }
+        .product-card:hover { border-color: var(--primary-dark); background: #f1f5f9; }
+        .flex-row { display: flex; gap: 8px; margin-top: 10px; }
+
+        /* يومية اليوم */
+        .page-header { text-align: center; margin: 10px 0; }
+        .page-title { font-size: 1.3rem; font-weight: bold; margin: 0; }
+        .date-navigator { display: flex; align-items: center; justify-content: center; gap: 15px; color: #64748b; font-size: 0.8rem; margin-top: 4px; }
+        .nav-arrow { background: white; border: 1px solid var(--border-color); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #334155; }
+
+        .grid-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .daily-card { background: var(--card-bg); border-radius: 14px; padding: 12px; text-align: center; border: 1px solid var(--border-color); }
         .daily-card.expense-card { background: #fffbeb; border-color: #fef3c7; }
-        .card-title { font-size: 0.85rem; color: #64748b; margin-bottom: 8px; font-weight: bold; }
-        .card-value { font-size: 1.4rem; font-weight: bold; }
+        .card-title { font-size: 0.8rem; color: #64748b; margin-bottom: 6px; font-weight: bold; }
+        .card-value { font-size: 1.2rem; font-weight: bold; }
         .val-red { color: var(--accent-red); }
         .val-green { color: var(--accent-green); }
-        .val-dark { color: #0f172a; }
 
-        /* صافي الصندوق */
-        .net-box { display: flex; justify-content: space-between; align-items: center; margin: 25px 5px 15px 5px; }
-        .net-title { font-size: 1.1rem; font-weight: bold; }
-        .net-value { font-size: 1.3rem; font-weight: bold; color: #0f172a; }
+        .net-box { display: flex; justify-content: space-between; align-items: center; margin: 15px 5px; background: white; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-color); }
+        .net-title { font-size: 1rem; font-weight: bold; }
+        .net-value { font-size: 1.2rem; font-weight: bold; color: #0f172a; }
 
-        /* الأزرار الرئيسية */
-        .btn-black { background: #0f172a; color: white; border: none; width: 100%; padding: 14px; border-radius: 25px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-white { background: white; color: #0f172a; border: 1px solid var(--border-color); width: 100%; padding: 14px; border-radius: 25px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+        .btn-black { background: #0f172a; color: white; border: none; width: 100%; padding: 12px; border-radius: 20px; font-weight: bold; font-size: 0.95rem; cursor: pointer; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-white { background: white; color: #0f172a; border: 1px solid var(--border-color); width: 100%; padding: 12px; border-radius: 20px; font-weight: bold; font-size: 0.95rem; cursor: pointer; }
+        .btn-primary { background: #0f766e; color: white; border: none; border-radius: 8px; padding: 10px; cursor: pointer; font-weight: bold; width: 100%; }
+        .btn-success { background: var(--accent-green); color: white; border: none; border-radius: 8px; padding: 10px; cursor: pointer; font-weight: bold; width: 100%; }
 
-        /* القائمة السفلية */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
-        .nav-btn { background: none; border: none; text-align: center; color: #64748b; font-size: 0.75rem; cursor: pointer; flex: 1; }
-        .nav-btn.active { color: var(--accent-gold); font-weight: bold; }
-        .nav-btn.active .nav-icon { background: #fef3c7; border-radius: 20px; padding: 2px 12px; }
-        .nav-icon { display: block; font-size: 1.2rem; margin-bottom: 2px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 8px; font-size: 0.95rem; }
 
-        input, select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; margin-bottom: 10px; font-size: 1rem; }
+        /* شريط التنقل السفلي */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 6px 0; z-index: 1000; }
+        .nav-btn { background: none; border: none; text-align: center; color: #64748b; font-size: 0.7rem; cursor: pointer; flex: 1; }
+        .nav-btn.active { color: #d97706; font-weight: bold; }
+        .nav-btn.active .nav-icon { background: #fef3c7; border-radius: 20px; padding: 2px 10px; }
+        .nav-icon { display: block; font-size: 1.1rem; margin-bottom: 2px; }
     </style>
 </head>
 <body>
@@ -83,7 +90,7 @@
             <div class="avatar">M</div>
             <div>
                 <div class="user-title">...hammed</div>
-                <div class="user-date" id="headerDate">19/10/2026</div>
+                <div class="user-date">الإثنين 19/10/2026</div>
                 <div class="debt-box"><span id="headerTotalDebts">15.00</span> <span class="debt-label">إجمالي الديون شيكل</span></div>
             </div>
         </div>
@@ -94,14 +101,47 @@
 
     <div class="container">
 
-        <!-- قسم اليومية -->
+        <!-- 1. قسم الطلبية -->
+        <div id="tab-order" class="tab-content">
+            <div class="card">
+                <h3>1. من هو الزبون؟</h3>
+                <select id="orderCustomerSelect"></select>
+            </div>
+            <div class="card">
+                <h3>2. اختر الأصناف</h3>
+                <div class="product-grid" id="productsGrid"></div>
+            </div>
+            <div class="card" style="text-align: center;">
+                <h3>المجموع: <span id="cartTotal" style="color:var(--accent-red)">0.00</span> شيكل</h3>
+                <div class="flex-row">
+                    <button class="btn-primary" onclick="checkout('account')">تسجيل على الحساب</button>
+                    <button class="btn-success" onclick="checkout('cash')">بيع فوري (كاش)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. قسم الزبائن -->
+        <div id="tab-customers" class="tab-content">
+            <div class="card">
+                <h3>إضافة زبون جديد</h3>
+                <input type="text" id="newCustName" placeholder="اسم الزبون">
+                <input type="tel" id="newCustPhone" placeholder="رقم الجوال">
+                <button class="btn-primary" onclick="addCustomer()">+ إضافة زبون</button>
+            </div>
+            <div class="card">
+                <h3>قائمة الزبائن</h3>
+                <div id="customersListContainer"></div>
+            </div>
+        </div>
+
+        <!-- 3. قسم يومية اليوم (الرئيسية في صورتك) -->
         <div id="tab-daily" class="tab-content active">
             <div class="page-header">
                 <h1 class="page-title">يومية اليوم</h1>
                 <div class="date-navigator">
-                    <button class="nav-arrow" onclick="changeDate(-1)">❯</button>
-                    <span id="currentDailyDate">الإثنين 19/10/2026</span>
-                    <button class="nav-arrow" onclick="changeDate(1)">❮</button>
+                    <button class="nav-arrow">❯</button>
+                    <span>الإثنين 19/10/2026</span>
+                    <button class="nav-arrow">❮</button>
                 </div>
             </div>
 
@@ -112,7 +152,7 @@
                 </div>
                 <div class="daily-card">
                     <div class="card-title">مبيعات فورية</div>
-                    <div class="card-value val-gold" id="cashSalesVal" style="color:#d97706">0.00</div>
+                    <div class="card-value" style="color:#d97706" id="cashSalesVal">0.00</div>
                 </div>
                 <div class="daily-card">
                     <div class="card-title">ديون مسدَّدة</div>
@@ -120,13 +160,13 @@
                 </div>
                 <div class="daily-card expense-card">
                     <div class="card-title" style="color:#b45309">مصاريف ▾</div>
-                    <div class="card-value val-dark" id="expensesVal">0.00</div>
+                    <div class="card-value" style="color:#1e293b" id="expensesVal">0.00</div>
                 </div>
             </div>
 
-            <div class="daily-card" style="margin-top: 12px; grid-column: span 2;">
+            <div class="daily-card" style="margin-top: 10px;">
                 <div class="card-title">عدد الحركات</div>
-                <div class="card-value val-dark" id="totalTxCount">0</div>
+                <div class="card-value" id="totalTxCount">0</div>
             </div>
 
             <div class="net-box">
@@ -134,18 +174,8 @@
                 <div class="net-value"><span id="netBoxVal">0.00</span> شيكل</div>
             </div>
 
-            <button class="btn-black" onclick="closeBox()"><span style="font-size:1.1rem">🔒</span> إغلاق الصندوق</button>
+            <button class="btn-black" onclick="alert('تم إغلاق الصندوق بنجاح')"><span style="font-size:1.1rem">🔒</span> إغلاق الصندوق</button>
             <button class="btn-white" onclick="openExpenseModal()">+ تسجيل مصروف</button>
         </div>
 
-        <!-- باقي الأقسام المؤقتة -->
-        <div id="tab-order" class="tab-content"><h2 style="text-align:center;">صفحة الطلبية</h2></div>
-        <div id="tab-customers" class="tab-content"><h2 style="text-align:center;">صفحة الزبائن</h2></div>
-        <div id="tab-reports" class="tab-content"><h2 style="text-align:center;">صفحة التقارير</h2></div>
-        <div id="tab-late" class="tab-content"><h2 style="text-align:center;">صفحة المتأخرين</h2></div>
-
-    </div>
-
-    <!-- شريط التنقل السفلي المطابق -->
-    <div class="bottom-nav">
-        <button class="nav-btn" onclick="
+        <!-- 4
