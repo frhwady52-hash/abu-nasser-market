@@ -3,443 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أبو ناصر ماركت - الدفتر الرقمي</title>
+    <title>أبو ناصر ماركت - النظام المحاسبي المتكامل</title>
     <style>
         :root {
-            --primary-color: #0f766e;
-            --accent-color: #f59e0b;
-            --success-color: #16a34a;
-            --danger-color: #dc2626;
-            --bg-color: #f1f5f9;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
+            --primary: #1e3a2f;
+            --accent: #b45309;
+            --success: #15803d;
+            --danger: #b91c1c;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
         }
+        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 70px; }
+        
+        /* الهيدر العلوي */
+        .top-bar { background: var(--primary); color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
+        .top-bar h2 { margin: 0; font-size: 1.1rem; }
+        .total-badge { background: #fee2e2; color: var(--danger); padding: 4px 10px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
 
-        * { box-sizing: border-box; }
+        /* المحتوى */
+        .container { max-width: 600px; margin: 15px auto; padding: 0 10px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-        body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-        }
+        .card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        /* شريط التنقل السفلي */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; border-top: 1px solid #e2e8f0; padding: 8px 0; z-index: 1000; }
+        .nav-item { text-align: center; color: #64748b; font-size: 0.8rem; cursor: pointer; background: none; border: none; flex: 1; }
+        .nav-item.active { color: var(--primary); font-weight: bold; }
+        .nav-item span { display: block; font-size: 1.2rem; }
 
-        .header {
-            background-color: #0f172a;
-            color: white;
-            padding: 1.2rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
+        /* الأزرار والنماذج */
+        input, select, button { width: 100%; padding: 12px; margin: 6px 0; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; }
+        .btn-primary { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
+        .btn-success { background: var(--success); color: white; border: none; font-weight: bold; cursor: pointer; }
+        .btn-danger { background: var(--danger); color: white; border: none; font-weight: bold; cursor: pointer; }
 
-        .header h1 { margin: 0; font-size: 1.4rem; }
-        .header h1 span { color: var(--accent-color); }
-        .header p { margin: 4px 0 0 0; font-size: 0.85rem; color: #94a3b8; }
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+        .product-card { background: #f1f5f9; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; border: 1px solid #e2e8f0; }
+        .product-card:hover { border-color: var(--primary); }
 
-        .badge {
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        .badge.online { background-color: var(--success-color); color: white; }
-        .badge.offline { background-color: var(--danger-color); color: white; }
-
-        .container { max-width: 800px; margin: 1.5rem auto; padding: 0 1rem; }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.2rem;
-            margin-bottom: 1.2rem;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .card h2 { margin-top: 0; font-size: 1.2rem; color: var(--primary-color); }
-
-        .tab-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1rem;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 0.75rem;
-            border: 2px solid var(--primary-color);
-            background: transparent;
-            color: var(--primary-color);
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .tab-btn.active {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .form-group, .form-inline { display: flex; gap: 10px; flex-wrap: wrap; }
-
-        input, select, button {
-            padding: 0.75rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 0.95rem;
-        }
-
-        input:focus, select:focus { outline: none; border-color: var(--primary-color); }
-        input, select { flex: 1; min-width: 140px; }
-
-        .btn { cursor: pointer; border: none; color: white; font-weight: bold; border-radius: 8px; }
-        .btn-primary { background-color: var(--primary-color); }
-        .btn-success { background-color: var(--success-color); }
-
-        .customer-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.9rem;
-            border-bottom: 1px solid #e2e8f0;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: background 0.2s;
-        }
-
-        .customer-item:hover { background-color: #f8fafc; }
-
-        .balance.positive { color: var(--danger-color); font-weight: bold; }
-        .balance.negative { color: var(--success-color); font-weight: bold; }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(15, 23, 42, 0.6);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            width: 92%;
-            max-width: 650px;
-            max-height: 85vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            left: 1rem; top: 0.8rem;
-            font-size: 1.8rem;
-            cursor: pointer;
-            color: #64748b;
-        }
-
-        .summary-box {
-            background: #f1f5f9;
-            padding: 0.8rem 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-            font-size: 1.1rem;
-            border-right: 4px solid var(--primary-color);
-        }
-
-        .table-wrapper { overflow-x: auto; }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-        }
-
-        th, td { border: 1px solid #e2e8f0; padding: 8px; text-align: right; }
-        th { background-color: #f8fafc; }
+        .flex-row { display: flex; gap: 8px; }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <div class="logo">
-            <h1>🛒 أبو ناصر <span>ماركت</span></h1>
-            <p>دفتر الحسابات، الزبائن والموردين</p>
+    <!-- الهيدر -->
+    <div class="top-bar">
+        <div>
+            <h2>🛒 أبو ناصر ماركت</h2>
+            <small style="color: #cbd5e1;">متصل بالإنترنت ✓</small>
         </div>
-        <div class="status-bar">
-            <span id="connectionStatus" class="badge online">📡 متصل</span>
+        <div>
+            <span>إجمالي الديون: </span>
+            <span class="total-badge" id="totalDebtsBadge">0.00 شيكل</span>
         </div>
-    </header>
+    </div>
 
-    <main class="container">
-        <!-- أزرار التبديل -->
-        <div class="tab-buttons">
-            <button class="tab-btn active" id="btnCustomers">👥 الزبائن</button>
-            <button class="tab-btn" id="btnSuppliers">🚚 الموردين (تجار الجملة)</button>
-        </div>
+    <div class="container">
 
-        <!-- إضافة حساب -->
-        <section class="card">
-            <h2 id="addFormTitle">إضافة زبون جديد</h2>
-            <form id="addAccountForm" class="form-group">
-                <input type="text" id="accountName" placeholder="اسم الزبون" required>
-                <input type="tel" id="accountPhone" placeholder="رقم الجوال">
-                <button type="submit" class="btn btn-primary" id="addBtnText">+ إضافة للحسابات</button>
-            </form>
-        </section>
-
-        <!-- القائمة -->
-        <section class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 1rem;">
-                <h2 id="listTitle" style="margin: 0;">قائمة حسابات الزبائن</h2>
-                <input type="text" id="searchAccount" placeholder="🔍 بحث...">
+        <!-- 1. قسم طلبية -->
+        <div id="tab-order" class="tab-content active">
+            <div class="card">
+                <h3>1. من هو الزبون؟</h3>
+                <select id="orderCustomerSelect"></select>
             </div>
-            <div id="accountsList"></div>
-        </section>
-
-        <!-- النافذة (Modal) -->
-        <div id="transactionModal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn" id="closeModal">&times;</span>
-                <h2 id="modalAccountName">كشف حساب</h2>
-                <div class="summary-box">
-                    <span>صافي الرصيد الحالي: </span>
-                    <strong id="modalAccountBalance">0</strong> شيكل
+            <div class="card">
+                <h3>2. اختر الأصناف التي أخذها</h3>
+                <div class="product-grid" id="productsGrid">
+                    <!-- المنتجات الافتراضية -->
                 </div>
-
-                <form id="addTransactionForm" class="form-inline">
-                    <select id="transType"></select>
-                    <input type="number" id="transAmount" placeholder="المبلغ" step="0.5" required>
-                    <input type="text" id="transNote" placeholder="البيان / تفاصيل الفاتورة">
-                    <button type="submit" class="btn btn-success">تسجيل الحركة</button>
-                </form>
-
-                <h3 style="margin-top: 1.5rem;">سجل الحركة الحسابية</h3>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>التاريخ</th>
-                                <th>نوع الحركة</th>
-                                <th>المبلغ</th>
-                                <th>البيان</th>
-                            </tr>
-                        </thead>
-                        <tbody id="transactionsTableBody"></tbody>
-                    </table>
+            </div>
+            <div class="card" style="text-align: center;">
+                <h2>المجموع: <span id="cartTotal">0.00</span> شيكل</h2>
+                <div class="flex-row">
+                    <button class="btn-primary" onclick="checkout('account')">تسجيل على الحساب</button>
+                    <button class="btn-success" onclick="checkout('cash')">بيع فوري (كاش)</button>
                 </div>
             </div>
         </div>
-    </main>
+
+        <!-- 2. قسم الزبائن -->
+        <div id="tab-customers" class="tab-content">
+            <div class="card">
+                <h3>إضافة زبون جديد</h3>
+                <input type="text" id="newCustName" placeholder="اسم الزبون">
+                <input type="tel" id="newCustPhone" placeholder="رقم الجوال">
+                <button class="btn-primary" onclick="addCustomer()">+ إضافة زبون</button>
+            </div>
+            <div class="card">
+                <h3>قائمة الزبائن والحسابات</h3>
+                <div id="customersListContainer"></div>
+            </div>
+        </div>
+
+        <!-- 3. قسم يومية الصندوق -->
+        <div id="tab-daily" class="tab-content">
+            <div class="card">
+                <h3>حركة صندوق اليوم</h3>
+                <p>مبيعات على الحساب: <strong id="dailyAccountSales">0.00</strong> شيكل</p>
+                <p>مبيعات فورية (كاش): <strong id="dailyCashSales">0.00</strong> شيكل</p>
+                <hr>
+                <h2>صافي الصندوق: <span id="netCash">0.00</span> شيكل</h2>
+            </div>
+            <div class="card">
+                <h3>سجل الحركات اليومية</h3>
+                <div id="dailyTransactionsList"></div>
+            </div>
+        </div>
+
+        <!-- 4. قسم التقارير -->
+        <div id="tab-reports" class="tab-content">
+            <div class="card">
+                <h3>التقارير المالية</h3>
+                <p>مجموع الديون المتراكمة: <strong id="reportTotalDebts" style="color:var(--danger)">0.00</strong> شيكل</p>
+                <p>إجمالي الحركات المسجلة: <strong id="reportTotalTx">0</strong> حركة</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- شريط التنقل السفلي -->
+    <div class="nav-bar">
+        <button class="nav-item active" onclick="switchTab('order', this)"><span>📝</span>طلبية</button>
+        <button class="nav-item" onclick="switchTab('customers', this)"><span>👥</span>الزبائن</button>
+        <button class="nav-item" onclick="switchTab('daily', this)"><span>📅</span>اليوم</button>
+        <button class="nav-item" onclick="switchTab('reports', this)"><span>📊</span>تقارير</button>
+    </div>
 
     <script>
-        const STORAGE_KEY = 'abu_nasser_market_v3';
-        let accounts = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-        let currentType = 'customer';
-        let currentAccountId = null;
-
-        const connectionStatus = document.getElementById('connectionStatus');
-        const addAccountForm = document.getElementById('addAccountForm');
-        const accountsList = document.getElementById('accountsList');
-        const transactionModal = document.getElementById('transactionModal');
-        const closeModal = document.getElementById('closeModal');
-        const addTransactionForm = document.getElementById('addTransactionForm');
-        const transTypeSelect = document.getElementById('transType');
-        const searchInput = document.getElementById('searchAccount');
-
-        const btnCustomers = document.getElementById('btnCustomers');
-        const btnSuppliers = document.getElementById('btnSuppliers');
-
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-
-        function updateOnlineStatus() {
-            if (navigator.onLine) {
-                connectionStatus.textContent = '📡 متصل';
-                connectionStatus.className = 'badge online';
-            } else {
-                connectionStatus.textContent = '⚡ أوفلاين';
-                connectionStatus.className = 'badge offline';
-            }
-        }
-
-        function saveData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
-            renderAccounts();
-        }
-
-        btnCustomers.addEventListener('click', () => switchTab('customer'));
-        btnSuppliers.addEventListener('click', () => switchTab('supplier'));
-
-        function switchTab(type) {
-            currentType = type;
-            btnCustomers.classList.toggle('active', type === 'customer');
-            btnSuppliers.classList.toggle('active', type === 'supplier');
-            
-            document.getElementById('addFormTitle').textContent = type === 'customer' ? 'إضافة زبون جديد' : 'إضافة مورد / تاجر جملة جديد';
-            document.getElementById('listTitle').textContent = type === 'customer' ? 'قائمة حسابات الزبائن' : 'قائمة حسابات الموردين';
-            document.getElementById('accountName').placeholder = type === 'customer' ? 'اسم الزبون' : 'اسم المورد / الشركة';
-            
-            renderAccounts();
-        }
-
-        addAccountForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('accountName').value.trim();
-            const phone = document.getElementById('accountPhone').value.trim();
-
-            if (name) {
-                accounts.push({
-                    id: Date.now(),
-                    name: name,
-                    phone: phone,
-                    type: currentType,
-                    transactions: []
-                });
-                saveData();
-                addAccountForm.reset();
-            }
-        });
-
-        function renderAccounts(filteredList = null) {
-            accountsList.innerHTML = '';
-            const list = filteredList || accounts.filter(a => (a.type || 'customer') === currentType);
-
-            if (list.length === 0) {
-                accountsList.innerHTML = `<p style="text-align:center; color:#64748b; padding:1rem;">لا يوجد ${currentType === 'customer' ? 'زبائن' : 'موردين'} حالياً.</p>`;
-                return;
-            }
-
-            list.forEach(account => {
-                const balance = calculateBalance(account.transactions || []);
-                const item = document.createElement('div');
-                item.className = 'customer-item';
-                
-                let balanceText = '';
-                if (currentType === 'customer') {
-                    balanceText = balance > 0 ? `عليه: ${balance}` : `له: ${Math.abs(balance)}`;
-                } else {
-                    balanceText = balance > 0 ? `له علينا: ${balance}` : `مدفوع زيادة: ${Math.abs(balance)}`;
-                }
-
-                item.innerHTML = `
-                    <div>
-                        <strong>${currentType === 'customer' ? '👤' : '🚚'} ${account.name}</strong>
-                        <br><small style="color:#64748b;">📱 ${account.phone || 'بدون رقم'}</small>
-                    </div>
-                    <div>
-                        <span class="balance ${balance > 0 ? 'positive' : 'negative'}">
-                            ${balanceText} شيكل
-                        </span>
-                    </div>
-                `;
-                item.onclick = () => openAccountModal(account.id);
-                accountsList.appendChild(item);
-            });
-        }
-
-        searchInput.addEventListener('keyup', () => {
-            const query = searchInput.value.toLowerCase();
-            const filtered = accounts.filter(a => 
-                (a.type || 'customer') === currentType &&
-                (a.name.toLowerCase().includes(query) || (a.phone && a.phone.includes(query)))
-            );
-            renderAccounts(filtered);
-        });
-
-        function calculateBalance(transactions) {
-            return transactions.reduce((acc, t) => {
-                return t.type === 'debit' ? acc + t.amount : acc - t.amount;
-            }, 0);
-        }
-
-        function openAccountModal(id) {
-            currentAccountId = id;
-            const account = accounts.find(a => a.id === id);
-            if (!account) return;
-
-            document.getElementById('modalAccountName').textContent = `كشف حساب: ${account.name}`;
-            
-            if (currentType === 'customer') {
-                transTypeSelect.innerHTML = `
-                    <option value="debit">🛒 طلبية / بضاعة (عليه)</option>
-                    <option value="credit">💵 دفعة كاش (له)</option>
-                `;
-            } else {
-                transTypeSelect.innerHTML = `
-                    <option value="debit">📦 فاتورة بضاعة جديدة (له علينا)</option>
-                    <option value="credit">💵 سداد دفعة للمورد (سددنا له)</option>
-                `;
-            }
-
-            renderTransactions(account);
-            transactionModal.style.display = 'flex';
-        }
-
-        closeModal.onclick = () => {
-            transactionModal.style.display = 'none';
+        // قاعدة البيانات المحلية
+        let data = JSON.parse(localStorage.getItem('abu_nasser_pos')) || {
+            customers: [{id: 1, name: 'محمد', phone: '0599016452', balance: 15.00, history: []}],
+            products: [
+                {id: 1, name: 'موز', price: 2.00},
+                {id: 2, name: 'عجوة', price: 5.00}
+            ],
+            transactions: []
         };
 
-        addTransactionForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const type = transTypeSelect.value;
-            const amount = parseFloat(document.getElementById('transAmount').value);
-            const note = document.getElementById('transNote').value.trim();
+        let currentCart = [];
 
-            const account = accounts.find(a => a.id === currentAccountId);
-            if (account && amount) {
-                if (!account.transactions) account.transactions = [];
-                account.transactions.push({
-                    id: Date.now(),
-                    date: new Date().toLocaleDateString('ar-EG'),
-                    type: type,
-                    amount: amount,
-                    note: note || '-'
-                });
-                saveData();
-                renderTransactions(account);
-                addTransactionForm.reset();
-            }
-        });
+        function saveData() {
+            localStorage.setItem('abu_nasser_pos', JSON.stringify(data));
+            updateUI();
+        }
 
-        function renderTransactions(account) {
-            const tbody = document.getElementById('transactionsTableBody');
-            const balanceEl = document.getElementById('modalAccountBalance');
-            tbody.innerHTML = '';
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-obj' || 'tab-' + tabId).classList.add('active'); // تصحيح معرف التاب
+            document.getElementById('tab-' + tabId).classList.add('active');
+            btn.classList.add('active');
+        }
 
-            const txs = account.transactions || [];
-            const total = calculateBalance(txs);
-            balanceEl.textContent = total;
+        function updateUI() {
+            // تحديث إجمالي الديون العامة
+            let totalDebts = data.customers.reduce((acc, c) => acc + c.balance, 0);
+            document.getElementById('totalDebtsBadge').textContent = totalDebts.toFixed(2) + ' شيكل';
 
-            txs.forEach(t => {
-                const tr = document.createElement('tr');
-                let typeText = '';
-                if (currentType === 'customer') {
-                    typeText = t.type === 'debit' ? '🛒 طلبية (عليه)' : '💵 دفعة (له)';
-                } else {
-                    typeText = t.type === 'debit' ? '📦 فاتورة جديدة' : '💵 دفعة مسددة';
-                }
+            // تحديث قائمة الزبائن في صفحة الطلبية
+            let select = document.getElementById('orderCustomerSelect');
+            select.innerHTML = '';
+            data.customers.forEach(c => {
+                let opt = document.createElement('option');
+                opt.value = c.id;
+                opt.textContent = `${c.name} (الدين: ${c.balance} شيكل)`;
+                select.appendChild(opt);
+            });
 
-                tr.innerHTML = `
-                    <td>${t.date}</td>
-                    <td>${typeText}</td>
-                    <td style="color: ${t.type === 'debit' ? '#dc2626' : '#16a34a'}; font-weight:bold;">${t.amount} شيكل</td>
-                    <td>${t.note}</td>
-                `;
-                tbody.appendChild(tr);
+            // تحديث عرض المنتجات في الطلبية
+            let grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            data.products.forEach(p => {
+                let div = document.createElement('div');
+                div.className = 'product-card';
+                div.innerHTML = `<strong>${p.name}</strong><br><small>${p.price} شيكل</small>`;
+                div.onclick = () => addToCart(p);
+                grid.appendChild(div);
+            });
+
+            // تحديث قائمة الزبائن
+            let custContainer = document.getElementById('customersListContainer');
+            custContainer.innerHTML = '';
+            data.customers.forEach(c => {
+                let div = document.createElement('div');
+                div.style.cssText = 'padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;';
+                div.innerHTML = `<div><strong>${c.name}</strong><br><small>${c.phone}</small></div><div style="color:var(--danger); font-weight:bold;">${c.balance} شيكل</div>`;
+                custContainer.appendChild(div);
+            });
+
+            // تحديث يومية الصندوق والتقارير
+            let cashSales = data.transactions.filter(t => t.type === 'cash').reduce((acc, t) => acc + t.amount, 0);
+            let accountSales = data.transactions.filter(t => t.type === 'account').reduce((acc, t) => acc + t.amount, 0);
+            
+            document.getElementById('dailyCashSales').textContent = cashSales.toFixed(2);
+            document.getElementById('dailyAccountSales').textContent = accountSales.toFixed(2);
+            document.getElementById('netCash').textContent = cashSales.toFixed(2);
+            document.getElementById('reportTotalDebts').textContent = totalDebts.toFixed(2);
+            document.getElementById('reportTotalTx').textContent = data.transactions.length;
+
+            let dailyList = document.getElementById('dailyTransactionsList');
+            dailyList.innerHTML = '';
+            data.transactions.slice().reverse().forEach(t => {
+                let d = document.createElement('div');
+                d.style.cssText = 'padding:8px; border-bottom:1px solid #f1f5f9; font-size:0.9rem;';
+                d.innerHTML = `<b>${t.title}</b> - ${t.amount} شيكل (${t.type === 'cash' ? 'كاش فوري' : 'على الحساب'}) <br><small>${t.date}</small>`;
+                dailyList.appendChild(d);
             });
         }
 
-        updateOnlineStatus();
-        renderAccounts();
+        function addToCart(product) {
+            currentCart.push(product);
+            let total = currentCart.reduce((acc, p) => acc + p.price, 0);
+            document.getElementById('cartTotal').textContent = total.toFixed(2);
+        }
+
+        function checkout(type) {
+            if (currentCart.length === 0) {
+                alert('اختر أصناف أولاً!');
+                return;
+            }
+            let total = currentCart.reduce((acc, p) => acc + p.price, 0);
+            let customerId = document.getElementById('orderCustomerSelect').value;
+            let customer = data.customers.find(c => c.id == customerId);
+
+            if (type === 'account' && customer) {
+                customer.balance += total;
+            }
+
+            data.transactions.push({
+                title: currentCart.map(p => p.name).join(' + '),
+                amount: total,
+                type: type,
+                date: new Date().toLocaleDateString('ar-EG')
+            });
+
+            currentCart = [];
+            document.getElementById('cartTotal').textContent = '0.00';
+            saveData();
+            alert('تمت العملية بنجاح!');
+        }
+
+        function addCustomer() {
+            let name = document.getElementById('newCustName').value.trim();
+            let phone = document.getElementById('newCustPhone').value.trim();
+            if (name) {
+                data.customers.push({ id: Date.now(), name, phone, balance: 0, history: [] });
+                document.getElementById('newCustName').value = '';
+                document.getElementById('newCustPhone').value = '';
+                saveData();
+            }
+        }
+
+        updateUI();
     </script>
 </body>
 </html>
